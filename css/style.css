@@ -1615,3 +1615,220 @@ grid-template-columns:1fr;
 
 
 }
+
+/* ==========================================
+   PROFESSIONAL QUOTE PAGE
+========================================== */
+
+
+.quote-choice-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:35px;
+
+    margin:50px 0 100px;
+
+}
+
+
+
+.quote-choice-card{
+
+    background:white;
+
+    padding:40px;
+
+    border-radius:24px;
+
+    box-shadow:0 15px 45px rgba(0,0,0,.08);
+
+    border-top:5px solid #2F8CFF;
+
+    transition:.35s ease;
+
+}
+
+
+
+.quote-choice-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 25px 60px rgba(0,0,0,.15);
+
+}
+
+
+
+.quote-choice-card h3{
+
+    font-family:"Space Grotesk",sans-serif;
+
+    font-size:1.5rem;
+
+    margin-bottom:20px;
+
+}
+
+
+
+.quote-choice-card p{
+
+    color:#666;
+
+    line-height:1.8;
+
+    margin-bottom:30px;
+
+}
+
+
+
+
+.quote-section{
+
+    margin-top:80px;
+
+    padding:50px;
+
+    background:#111827;
+
+    color:white;
+
+    border-radius:28px;
+
+}
+
+
+
+
+.quote-section h2{
+
+    color:white;
+
+    margin-bottom:30px;
+
+}
+
+
+
+
+.quote-form{
+
+    max-width:750px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+
+}
+
+
+
+.quote-form label{
+
+    margin-top:15px;
+
+    font-weight:600;
+
+}
+
+
+
+.quote-form input,
+
+.quote-form textarea,
+
+.quote-form select{
+
+    width:100%;
+
+    padding:16px;
+
+    border-radius:12px;
+
+    border:none;
+
+    font-family:Inter,sans-serif;
+
+    font-size:1rem;
+
+    background:white;
+
+    color:#222;
+
+}
+
+
+
+.quote-form select{
+
+    appearance:auto;
+
+    cursor:pointer;
+
+}
+
+
+
+.quote-form textarea{
+
+    resize:vertical;
+
+}
+
+
+
+.quote-form input:focus,
+
+.quote-form textarea:focus,
+
+.quote-form select:focus{
+
+    outline:3px solid rgba(47,140,255,.35);
+
+}
+
+
+
+
+.quote-form button{
+
+    margin-top:25px;
+
+    border:none;
+
+    cursor:pointer;
+
+    width:max-content;
+
+}
+
+
+
+
+
+@media(max-width:900px){
+
+
+    .quote-choice-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+
+
+    .quote-section{
+
+        padding:30px 20px;
+
+    }
+
+
+}
