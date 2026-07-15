@@ -1,16 +1,33 @@
-const menuButton = document.querySelector(".menu-toggle");
+console.log(
+"PlasticBlocks3D Loaded"
+);
 
-const mobileMenu = document.querySelector(".mobile-menu");
+
+
+const menuButton =
+document.querySelector(".menu-toggle");
+
+
+const menu =
+document.querySelector(".mobile-menu");
+
 
 
 if(menuButton){
 
-    menuButton.addEventListener("click", () => {
 
-        mobileMenu.classList.toggle("active");
+menuButton.addEventListener(
+"click",
+()=>{
 
-        menuButton.classList.toggle("open");
 
-    });
+menu.classList.toggle(
+"open"
+);
+
+
+});
+
+
 
 }

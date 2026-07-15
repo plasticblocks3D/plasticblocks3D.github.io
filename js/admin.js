@@ -1,7 +1,7 @@
 async function checkAdmin(){
 
-const {data} =
-await supabaseClient.auth.getSession();
+
+const {data} = await supabaseClient.auth.getSession();
 
 
 if(!data.session){
@@ -10,6 +10,7 @@ window.location.href="login.html";
 
 }
 
+
 }
 
 
@@ -17,10 +18,19 @@ checkAdmin();
 
 
 
-let quotes = [];
+console.log("ADMIN JS LOADED");
 
 
 
+let allQuotes = [];
+
+
+
+
+
+// =============================
+// LOAD QUOTE REQUESTS
+// =============================
 
 
 async function loadQuotes(){
@@ -46,13 +56,14 @@ return;
 
 
 
-quotes=data;
+allQuotes=data;
 
 
-updateCounts();
+updateCounters();
 
 
-displayQuotes(quotes);
+displayQuotes(allQuotes);
+
 
 
 }
@@ -61,54 +72,25 @@ displayQuotes(quotes);
 
 
 
-function updateCounts(){
+// =============================
+// DISPLAY REQUEST CARDS
+// =============================
 
 
-document.getElementById("newCount").textContent =
-quotes.filter(q=>q.status==="New").length;
-
-
-document.getElementById("reviewCount").textContent =
-quotes.filter(q=>q.status==="Reviewing").length;
-
-
-document.getElementById("quoteCount").textContent =
-quotes.filter(q=>q.status==="Quoted").length;
-
-
-document.getElementById("printingCount").textContent =
-quotes.filter(q=>q.status==="Printing").length;
-
-
-document.getElementById("completeCount").textContent =
-quotes.filter(q=>q.status==="Completed").length;
-
-
-document.getElementById("archiveCount").textContent =
-quotes.filter(q=>q.status==="Archived").length;
-
-
-}
+function displayQuotes(quotes){
 
 
 
-
-
-
-function displayQuotes(list){
-
-
-const container =
-document.getElementById("quotes");
+const container=document.getElementById("quotes");
 
 
 container.innerHTML="";
 
 
 
-if(list.length===0){
+if(quotes.length===0){
 
-container.innerHTML="<p>No projects found.</p>";
+container.innerHTML="<p>No requests found.</p>";
 
 return;
 
@@ -116,37 +98,85 @@ return;
 
 
 
-list.forEach(quote=>{
+quotes.forEach(quote=>{
+
 
 
 container.innerHTML += `
 
 
-<div class="mini-card" onclick="showDetails(${quote.id})">
+<div class="quote-card" data-id="${quote.id}">
 
 
 <h3>
-${quote.project_name || "Untitled Project"}
+
+${quote.project_name}
+
 </h3>
 
 
 <p>
-${quote.name}
+
+<b>${quote.name}</b>
+
 </p>
 
 
-<span class="status-badge">
-${quote.status}
-</span>
+<p>
+
+${quote.project_type}
+
+</p>
+
+
+
+<p>
+
+Status:
+
+<select class="status-select" data-id="${quote.id}">
+
+
+${createOption("New",quote.status)}
+
+${createOption("Reviewing",quote.status)}
+
+${createOption("Quoted",quote.status)}
+
+${createOption("Approved",quote.status)}
+
+${createOption("Printing",quote.status)}
+
+${createOption("Completed",quote.status)}
+
+${createOption("Archived",quote.status)}
+
+
+</select>
+
+
+</p>
+
+
+
+<button class="view-button">
+
+View Details
+
+</button>
+
 
 
 </div>
 
 
+
 `;
 
 
+
 });
+
 
 
 }
@@ -155,24 +185,86 @@ ${quote.status}
 
 
 
+function createOption(value,current){
 
 
-function showDetails(id){
+return `
+
+<option ${value===current?"selected":""}>
+
+${value}
+
+</option>
+
+`;
+
+
+
+}
+
+
+
+
+
+// =============================
+// DETAILS PANEL
+// =============================
+
+
+document.addEventListener("click",function(event){
+
+
+
+if(event.target.classList.contains("view-button")){
+
+
+const card =
+event.target.closest(".quote-card");
+
+
+const id =
+card.dataset.id;
+
 
 
 const quote =
-quotes.find(q=>q.id===id);
+allQuotes.find(q=>q.id==id);
 
 
 
-document.getElementById("detailsPanel").innerHTML = `
+showDetails(quote);
 
 
-<div class="details-box">
+
+}
+
+
+
+});
+
+
+
+
+
+function showDetails(quote){
+
+
+
+const panel =
+document.getElementById("detailsPanel");
+
+
+
+panel.innerHTML=`
+
+
+<div class="details-card">
 
 
 <h2>
+
 ${quote.project_name}
+
 </h2>
 
 
@@ -183,91 +275,38 @@ ${quote.name}
 </p>
 
 
-<p>
 
+<p>
 <b>Email:</b>
-
-<a href="mailto:${quote.email}">
 ${quote.email}
-</a>
-
 </p>
 
 
 
 <p>
-
-<b>Project Type:</b>
-
+<b>Type:</b>
 ${quote.project_type}
-
 </p>
 
 
 
 <p>
-
 <b>Description:</b>
-
 </p>
 
-
 <p>
-
 ${quote.details}
-
 </p>
-
-
 
 
 
 <p>
-
-<b>Status:</b>
-
-
-<select class="status-select"
-data-id="${quote.id}">
-
-
-${[
-"New",
-"Reviewing",
-"Quoted",
-"Approved",
-"Printing",
-"Completed",
-"Archived"
-
-]
-.map(status=>`
-
-<option ${quote.status===status?"selected":""}>
-
-${status}
-
-</option>
-
-`)
-.join("")}
-
-
-</select>
-
-
+<b>Files:</b>
 </p>
-
-
-
-
-
-<h3>
-Files
-</h3>
 
 
 ${
+
 quote.file_link
 
 ?
@@ -276,11 +315,9 @@ quote.file_link
 .split("\n")
 .map(file=>`
 
-<a class="file-button"
-href="${file}"
-target="_blank">
+<a href="${file}" target="_blank">
 
-📎 Open File
+Open File
 
 </a><br>
 
@@ -289,23 +326,27 @@ target="_blank">
 
 :
 
-"No files uploaded"
+"No files"
 
 }
 
 
 
+<br>
 
 
-<button onclick="closeDetails()">
+<button 
+class="archive-button"
+data-id="${quote.id}">
 
-Close
+Archive Request
 
 </button>
 
 
 
 </div>
+
 
 
 `;
@@ -320,20 +361,13 @@ Close
 
 
 
-function closeDetails(){
 
-document.getElementById("detailsPanel").innerHTML="";
-
-}
-
+// =============================
+// UPDATE STATUS
+// =============================
 
 
-
-
-
-
-
-document.addEventListener("change", async function(event){
+document.addEventListener("change",async function(event){
 
 
 
@@ -349,7 +383,7 @@ event.target.value;
 
 
 
-await supabaseClient
+const {error}=await supabaseClient
 
 .from("quote_requests")
 
@@ -363,12 +397,86 @@ status:status
 
 
 
+if(error){
+
+console.error(error);
+
+alert("Update failed");
+
+}
+
+else{
+
+console.log("Status updated");
+
 loadQuotes();
+
+}
+
 
 
 }
 
 
+
+});
+
+
+
+
+
+
+
+
+// =============================
+// ARCHIVE
+// =============================
+
+
+document.addEventListener("click",async function(event){
+
+
+
+if(event.target.classList.contains("archive-button")){
+
+
+const id =
+event.target.dataset.id;
+
+
+
+const {error}=await supabaseClient
+
+.from("quote_requests")
+
+.update({
+
+status:"Archived"
+
+})
+
+.eq("id",id);
+
+
+
+if(error){
+
+console.error(error);
+
+}
+
+else{
+
+loadQuotes();
+
+}
+
+
+
+}
+
+
+
 });
 
 
@@ -379,52 +487,160 @@ loadQuotes();
 
 
 
+// =============================
+// COUNTERS
+// =============================
+
+
+function updateCounters(){
+
+
+
+document.getElementById("newCount").textContent =
+countStatus("New");
+
+
+document.getElementById("reviewCount").textContent =
+countStatus("Reviewing");
+
+
+document.getElementById("quoteCount").textContent =
+countStatus("Quoted");
+
+
+document.getElementById("printingCount").textContent =
+countStatus("Printing");
+
+
+document.getElementById("completeCount").textContent =
+countStatus("Completed");
+
+
+document.getElementById("archiveCount").textContent =
+countStatus("Archived");
+
+
+}
+
+
+
+function countStatus(status){
+
+
+return allQuotes.filter(q=>q.status===status).length;
+
+
+}
+
+
+
+
+
+
+
+
+// =============================
+// SEARCH + FILTER
+// =============================
+
+
 document
-
 .getElementById("searchQuotes")
+.addEventListener("input",filterQuotes);
 
-.addEventListener("input",function(){
+
+
+document
+.getElementById("statusFilter")
+.addEventListener("change",filterQuotes);
+
+
+
+
+
+function filterQuotes(){
+
 
 
 const search =
-this.value.toLowerCase();
+document.getElementById("searchQuotes")
+.value
+.toLowerCase();
 
 
 
-displayQuotes(
+const filter =
+document.getElementById("statusFilter")
+.value;
 
-quotes.filter(q=>
 
-JSON.stringify(q)
 
-.toLowerCase()
+let results =
+allQuotes.filter(q=>{
 
-.includes(search)
 
-)
 
-);
+let matchesSearch =
+
+q.project_name.toLowerCase().includes(search)
+
+||
+
+q.name.toLowerCase().includes(search);
+
+
+
+let matchesStatus =
+
+filter==="all"
+
+||
+
+q.status===filter;
+
+
+
+return matchesSearch && matchesStatus;
+
 
 
 });
 
 
 
+displayQuotes(results);
+
+
+
+}
 
 
 
 
-document
-
-.getElementById("statusFilter")
-
-.addEventListener("change",function(){
 
 
 
-if(this.value==="all"){
 
-displayQuotes(quotes);
+// =============================
+// VISITOR ANALYTICS
+// =============================
+
+
+async function loadAnalytics(){
+
+
+
+const {data,error}=await supabaseClient
+
+.from("site_visits")
+
+.select("*");
+
+
+
+if(error){
+
+console.error(error);
 
 return;
 
@@ -432,23 +648,96 @@ return;
 
 
 
-displayQuotes(
+document.getElementById("totalViews")
+.textContent=data.length;
 
-quotes.filter(q=>
 
-q.status===this.value
 
-)
+const visitors =
+[...new Set(data.map(v=>v.visitor_id))];
 
-);
 
+document.getElementById("totalVisitors")
+.textContent=
+visitors.length;
+
+
+
+
+const today =
+new Date()
+.toISOString()
+.split("T")[0];
+
+
+
+const todayVisits =
+data.filter(v=>v.date===today);
+
+
+
+document.getElementById("todayVisitors")
+.textContent=
+todayVisits.length;
+
+
+
+
+let hours = Array(24).fill(0);
+
+
+
+data.forEach(v=>{
+
+hours[v.hour]++;
 
 });
 
 
 
 
+new Chart(
 
+document.getElementById("visitorChart"),
+
+{
+
+type:"bar",
+
+data:{
+
+labels:
+
+hours.map((x,i)=>i+":00"),
+
+
+datasets:[{
+
+label:"Visitors",
+
+data:hours
+
+}]
+
+}
+
+}
+
+);
+
+
+
+}
+
+
+
+
+
+
+
+// =============================
+// LOGOUT
+// =============================
 
 
 document
@@ -471,4 +760,8 @@ window.location.href="login.html";
 
 
 
+
+
 loadQuotes();
+
+loadAnalytics();
