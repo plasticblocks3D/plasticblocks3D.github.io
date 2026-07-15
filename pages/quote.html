@@ -208,22 +208,14 @@
 </h2>
 
 
-<form 
-class="quote-form"
-action="https://formsubmit.co/plasticblocks3D@outlook.com"
-method="POST">
-
-<input type="hidden" name="_subject" value="New PlasticBlocks3D Message">
-
-<input type="hidden" name="_captcha" value="false">
-
-<input type="hidden" name="_template" value="table">
+<form class="quote-form" id="messageForm">
 
 <label>
     Name
 </label>
 
 <input 
+id="messageName"
 type="text"
 name="Name"
 placeholder="Your name"
@@ -236,6 +228,7 @@ required>
 </label>
 
 <input
+id="messageEmail"
 type="email"
 name="Email"
 placeholder="Your email"
@@ -248,6 +241,7 @@ required>
 </label>
 
 <textarea
+id="messageText"
 name="Message"
 rows="5"
 placeholder="What can I help you with?"
@@ -277,17 +271,30 @@ required></textarea>
 </h2>
 
 
+<form class="quote-form" id="projectForm">
 
-<form 
-class="quote-form"
-action="https://formsubmit.co/plasticblocks3D@outlook.com"
-method="POST">
+<label>
+    Name
+</label>
 
-<input type="hidden" name="_subject" value="New PlasticBlocks3D Project Request">
+<input
+id="projectCustomerName"
+type="text"
+name="Customer Name"
+placeholder="Your name"
+required>
 
-<input type="hidden" name="_captcha" value="false">
 
-<input type="hidden" name="_template" value="table">
+<label>
+    Email
+</label>
+
+<input
+id="projectCustomerEmail"
+type="email"
+name="Customer Email"
+placeholder="Your email"
+required>
 
 
 <label>
@@ -296,6 +303,7 @@ method="POST">
 
 
 <input 
+id="projectName"
 type="text"
 name="Project Name"
 placeholder="Example: Custom replacement part">
@@ -307,7 +315,9 @@ placeholder="Example: Custom replacement part">
 </label>
 
 
-<select name="Project Type">
+<select 
+id="projectType"
+name="Project Type">
 
 <option>
 Custom CAD Design
@@ -336,6 +346,7 @@ Custom Creation
 
 
 <textarea
+id="projectDetails"
 name="Project Details"
 rows="8"
 placeholder="Describe your idea, measurements, materials, or goals..."></textarea>
@@ -348,6 +359,7 @@ placeholder="Describe your idea, measurements, materials, or goals..."></textare
 
 
 <input 
+id="fileLink"
 type="text"
 name="File Link"
 placeholder="Paste a Google Drive link or file location">
@@ -514,6 +526,8 @@ placeholder="Paste a Google Drive link or file location">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="../js/supabase.js"></script>
+
+<script src="../js/quote.js"></script>
 
 <script src="../js/script.js"></script>
 
