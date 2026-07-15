@@ -1,0 +1,592 @@
+:root {
+  --bg: #0d1117;
+  --card: #171c24;
+  --accent: #2f8cff;
+  --text: #f5f7fa;
+  --muted: #aab7c8;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: Inter, sans-serif;
+  background: linear-gradient(#0d1117, #111827);
+  color: var(--text);
+}
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 6%;
+  background: #0d1117;
+  border-bottom: 1px solid #2b3443;
+  position: sticky;
+  top: 0;
+}
+.brand {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+.cube {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+.brand h2 {
+  font-family: "Space Grotesk";
+}
+.brand p {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+nav {
+  display: flex;
+  gap: 20px;
+}
+nav a {
+  text-decoration: none;
+  color: var(--muted);
+}
+.cta,
+.primary,
+.secondary {
+  text-decoration: none;
+  padding: 14px 20px;
+  border-radius: 12px;
+}
+.cta,
+.primary {
+  background: var(--accent);
+  color: #fff;
+}
+.secondary {
+  border: 1px solid var(--accent);
+  color: #fff;
+}
+.hero {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 50px;
+  align-items: center;
+  padding: 80px 6%;
+  min-height: 80vh;
+}
+.eyebrow {
+  color: #7db8ff;
+  letter-spacing: 0.15em;
+  margin-bottom: 20px;
+}
+.hero h1 {
+  font-family: "Space Grotesk";
+  font-size: 4.5rem;
+  line-height: 0.95;
+  margin-bottom: 25px;
+}
+.hero p {
+  color: var(--muted);
+  line-height: 1.8;
+}
+.buttons {
+  display: flex;
+  gap: 16px;
+  margin-top: 30px;
+}
+.placeholder{
+
+height:460px;
+
+border-radius:28px;
+
+background:
+linear-gradient(
+135deg,
+#1d2735,
+#111827
+);
+
+border:1px solid rgba(255,255,255,.08);
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+font-family:"Space Grotesk";
+
+font-size:1.4rem;
+
+color:#6faeff;
+
+box-shadow:
+
+0 35px 80px rgba(0,0,0,.35),
+
+0 0 80px rgba(47,140,255,.12);
+
+overflow:hidden;
+
+position:relative;
+
+}
+
+.placeholder::before{
+
+content:"";
+
+position:absolute;
+
+inset:0;
+
+background:
+
+linear-gradient(
+
+90deg,
+
+transparent,
+
+rgba(255,255,255,.05),
+
+transparent
+
+);
+
+transform:translateX(-100%);
+
+animation:shine 6s infinite;
+
+}
+
+@keyframes shine{
+
+100%{
+
+transform:translateX(100%);
+
+}
+
+}
+.intro {
+  background: #f4f1e8;
+  color: #222;
+  padding: 80px 6%;
+}
+.intro h2 {
+  font-family: "Space Grotesk";
+  margin-bottom: 20px;
+}
+@media (max-width: 900px) {
+  nav {
+    display: none;
+  }
+  .hero {
+    grid-template-columns: 1fr;
+  }
+  .hero h1 {
+    font-size: 3rem;
+  }
+  .buttons {
+    flex-direction: column;
+  }
+}
+
+
+/* ========================================= */
+/* SERVICES / INTRO SECTION                  */
+/* ========================================= */
+
+.intro{
+
+    background:#F6F3EC;
+
+    color:#242424;
+
+    padding:120px 8%;
+
+}
+
+.container{
+
+    max-width:1300px;
+
+    margin:auto;
+
+}
+
+.section-label{
+
+    color:#2F8CFF;
+
+    font-weight:700;
+
+    letter-spacing:3px;
+
+    margin-bottom:18px;
+
+    text-transform:uppercase;
+
+}
+
+.intro h2{
+
+    font-family:"Space Grotesk",sans-serif;
+
+    font-size:3rem;
+
+    margin-bottom:20px;
+
+}
+
+.intro-text{
+
+    font-size:1.15rem;
+
+    color:#555;
+
+    line-height:1.8;
+
+    max-width:720px;
+
+    margin-bottom:70px;
+
+}
+
+.cards{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:30px;
+
+}
+
+.card{
+
+    background:white;
+
+    padding:35px;
+
+    border-radius:22px;
+
+    box-shadow:0 12px 40px rgba(0,0,0,.08);
+
+    transition:.35s;
+
+    border-top:5px solid #2F8CFF;
+
+}
+
+.card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 18px 55px rgba(0,0,0,.15);
+
+}
+
+.card h3{
+
+    font-family:"Space Grotesk";
+
+    margin-bottom:15px;
+
+    font-size:1.4rem;
+
+}
+
+.card p{
+
+    color:#666;
+
+    line-height:1.8;
+
+}
+
+@media(max-width:900px){
+
+.cards{
+
+grid-template-columns:1fr;
+
+}
+
+.intro h2{
+
+font-size:2.3rem;
+
+}
+
+}
+
+/* ==========================================
+   MEET THE MAKER
+========================================== */
+
+.maker{
+
+    background:#111827;
+
+    color:white;
+
+    padding:120px 8%;
+
+}
+
+.maker-container{
+
+    max-width:1300px;
+
+    margin:auto;
+
+    display:grid;
+
+    grid-template-columns:1fr 1.2fr;
+
+    gap:70px;
+
+    align-items:center;
+
+}
+
+.maker-photo{
+
+    display:flex;
+
+    justify-content:center;
+
+}
+
+.photo-placeholder{
+
+    width:100%;
+
+    max-width:420px;
+
+    height:420px;
+
+    border-radius:24px;
+
+    border:3px dashed #2F8CFF;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    color:#9fb3c8;
+
+    font-size:1.3rem;
+
+    background:#1A2230;
+
+}
+
+.maker-text h2{
+
+    font-family:"Space Grotesk",sans-serif;
+
+    font-size:3rem;
+
+    margin:20px 0;
+
+}
+
+.maker-text p{
+
+    color:#C6D0DD;
+
+    line-height:1.9;
+
+    margin-bottom:24px;
+
+    font-size:1.08rem;
+
+}
+
+.maker-text ul{
+
+    list-style:none;
+
+    margin:35px 0;
+
+}
+
+.maker-text li{
+
+    margin-bottom:16px;
+
+    font-size:1.05rem;
+
+}
+
+.maker .primary{
+
+    display:inline-block;
+
+    margin-top:20px;
+
+}
+
+@media(max-width:900px){
+
+    .maker-container{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .maker-text{
+
+        text-align:center;
+
+    }
+
+    .maker-text ul{
+
+        text-align:left;
+
+        display:inline-block;
+
+    }
+
+}
+
+/* ==========================================
+   HOW IT WORKS
+========================================== */
+
+.process{
+
+    background:#111827;
+
+    color:white;
+
+    padding:120px 8%;
+
+}
+
+.process h2{
+
+    font-family:"Space Grotesk",sans-serif;
+
+    font-size:3rem;
+
+    margin:20px 0;
+
+}
+
+.process-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:30px;
+
+    margin-top:70px;
+
+}
+
+.step{
+
+    background:#1A2230;
+
+    border-radius:22px;
+
+    padding:35px;
+
+    text-align:center;
+
+    transition:.35s;
+
+    border-top:5px solid #2F8CFF;
+
+}
+
+.step:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 18px 45px rgba(0,0,0,.25);
+
+}
+
+.icon{
+
+    font-size:3rem;
+
+    margin-bottom:20px;
+
+}
+
+.step h3{
+
+    font-family:"Space Grotesk";
+
+    margin-bottom:15px;
+
+}
+
+.step p{
+
+    color:#C6D0DD;
+
+    line-height:1.7;
+
+}
+
+@media(max-width:900px){
+
+.process-grid{
+
+grid-template-columns:1fr;
+
+}
+
+}
+
+/* ==========================================
+   HERO IMAGE
+========================================== */
+
+.hero-image{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
+
+.hero-image img{
+
+    width:100%;
+
+    max-width:520px;
+
+    border-radius:24px;
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,.35);
+
+    transition:.4s ease;
+
+}
+
+.hero-image img:hover{
+
+    transform:translateY(-8px) scale(1.02);
+
+}
