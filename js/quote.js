@@ -10,18 +10,27 @@ document
     button.textContent = "Sending...";
 
 
+    // Get form values
+    const name = this.querySelector('[name="name"]').value;
+    const email = this.querySelector('[name="email"]').value;
+    const projectName = this.querySelector('[name="project_name"]').value;
+    const projectType = this.querySelector('[name="project_type"]').value;
+    const details = this.querySelector('[name="details"]').value;
+    const fileLink = this.querySelector('[name="file_link"]').value;
+
+
     const { data, error } = await supabaseClient
-    .from("quote_requests")
-    .insert([
-        {
-            name: document.getElementById("projectCustomerName").value,
-            email: document.getElementById("projectCustomerEmail").value,
-            project_type: document.getElementById("projectType").value,
-            project_name: document.getElementById("projectName").value,
-            details: document.getElementById("projectDetails").value,
-            file_link: document.getElementById("fileLink").value
-        }
-    ]);
+        .from("quote_requests")
+        .insert([
+            {
+                name: name,
+                email: email,
+                project_type: projectType,
+                project_name: projectName,
+                details: details,
+                file_link: fileLink
+            }
+        ]);
 
 
     if(error){
