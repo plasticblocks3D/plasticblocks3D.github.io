@@ -1832,3 +1832,26 @@ grid-template-columns:1fr;
 
 
 }
+
+.admin-login {
+
+    text-align:center;
+    margin-top:20px;
+
+}
+
+
+.admin-login a {
+
+    color:#777;
+    font-size:14px;
+    text-decoration:none;
+
+}
+
+
+.admin-login a:hover {
+
+    color:#111;
+
+}

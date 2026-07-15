@@ -75,15 +75,16 @@ document
     const { error } = await supabaseClient
     .from("quote_requests")
     .insert([
-        {
-            name:name,
-            email:email,
-            project_type:projectType,
-            project_name:projectName,
-            details:details,
-            file_link:fileLinks
-        }
-    ]);
+    {
+        name:name,
+        email:email,
+        project_type:projectType,
+        project_name:projectName,
+        details:details,
+        file_link:fileLinks,
+        status:"New"
+    }
+]);
 
 
 
