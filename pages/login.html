@@ -10,6 +10,8 @@
 
 <link rel="stylesheet" href="../css/style.css">
 
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+
 </head>
 
 
@@ -18,7 +20,9 @@
 
 <header class="nav">
 
+
     <div class="brand">
+
 
         <a href="../index.html" class="logo-link">
 
@@ -39,29 +43,110 @@
 
         </div>
 
+
     </div>
+
+
+
+    <button class="menu-toggle" aria-label="Open Menu">
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+    </button>
+
+
+
+    <nav class="mobile-menu">
+
+        <a href="../index.html">
+            Home
+        </a>
+
+        <a href="services.html">
+            Services
+        </a>
+
+        <a href="gallery.html">
+            Gallery
+        </a>
+
+        <a href="quote.html">
+            Request Quote
+        </a>
+
+        <a href="about.html">
+            About
+        </a>
+
+        <a href="contact.html">
+            Contact
+        </a>
+
+        <a class="active" href="login.html">
+            Admin Login
+        </a>
+
+
+    </nav>
+
 
 </header>
 
 
 
 
-<section class="page-content">
+
+<section class="page-header">
+
 
 <div class="container">
 
 
+<p class="section-label">
+
+    ADMIN ACCESS
+
+</p>
+
+
 <h1>
-Admin Login
+
+    Login
+
 </h1>
 
 
-<form id="loginForm">
+<p class="intro-text">
+
+    Sign in to manage PlasticBlocks3D customer requests.
+
+</p>
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+<section class="page-content">
+
+
+<div class="container">
+
+
+<form id="loginForm" class="quote-form">
 
 
 <label>
 Email
 </label>
+
 
 <input
 id="email"
@@ -71,9 +156,11 @@ required>
 
 
 
+
 <label>
 Password
 </label>
+
 
 <input
 id="password"
@@ -83,25 +170,167 @@ required>
 
 
 
+
 <button class="primary">
+
 Login
+
 </button>
 
 
 </form>
 
 
+
 <br>
 
 
 <a href="../index.html">
+
 ← Back to Website
+
 </a>
+
 
 
 </div>
 
+
 </section>
+
+
+
+
+
+
+<footer class="footer">
+
+
+<div class="container footer-grid">
+
+
+<div>
+
+<h2>
+PlasticBlocks3D
+</h2>
+
+
+<p class="footer-tagline">
+
+Designed. Engineered. Printed.
+
+</p>
+
+
+<p class="footer-text">
+
+Built by one maker,
+one project at a time.
+
+</p>
+
+
+</div>
+
+
+
+<div>
+
+
+<h3>
+Explore
+</h3>
+
+
+<ul class="footer-links">
+
+
+<li>
+<a href="../index.html">
+Home
+</a>
+</li>
+
+
+<li>
+<a href="services.html">
+Services
+</a>
+</li>
+
+
+<li>
+<a href="gallery.html">
+Gallery
+</a>
+</li>
+
+
+<li>
+<a href="quote.html">
+Request Quote
+</a>
+</li>
+
+
+<li>
+<a href="about.html">
+About
+</a>
+</li>
+
+
+<li>
+<a href="contact.html">
+Contact
+</a>
+</li>
+
+
+</ul>
+
+
+</div>
+
+
+
+<div>
+
+
+<h3>
+Account
+</h3>
+
+
+<ul class="footer-links">
+
+
+<li>
+Admin Login
+</li>
+
+
+</ul>
+
+
+</div>
+
+
+</div>
+
+
+
+<div class="copyright">
+
+© 2026 PlasticBlocks3D
+
+</div>
+
+
+</footer>
+
+
 
 
 
@@ -110,6 +339,8 @@ Login
 <script src="../js/supabase.js"></script>
 
 <script src="../js/login.js"></script>
+
+<script src="../js/script.js"></script>
 
 
 </body>
