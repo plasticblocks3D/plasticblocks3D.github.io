@@ -1855,3 +1855,15 @@ grid-template-columns:1fr;
     color:#111;
 
 }
+
+.status-select {
+
+padding:8px;
+
+border-radius:6px;
+
+border:1px solid #ccc;
+
+font-size:14px;
+
+}
