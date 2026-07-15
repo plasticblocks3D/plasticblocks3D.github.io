@@ -10,13 +10,12 @@ document
     button.textContent = "Sending...";
 
 
-    // Get form values
-    const name = this.querySelector('[name="name"]').value;
-    const email = this.querySelector('[name="email"]').value;
-    const projectName = this.querySelector('[name="project_name"]').value;
-    const projectType = this.querySelector('[name="project_type"]').value;
-    const details = this.querySelector('[name="details"]').value;
-    const fileLink = this.querySelector('[name="file_link"]').value;
+    const name = document.getElementById("projectCustomerName").value;
+    const email = document.getElementById("projectCustomerEmail").value;
+    const projectName = document.getElementById("projectName").value;
+    const projectType = document.getElementById("projectType").value;
+    const details = document.getElementById("projectDetails").value;
+    const fileLink = document.getElementById("fileLink").value;
 
 
     const { data, error } = await supabaseClient
