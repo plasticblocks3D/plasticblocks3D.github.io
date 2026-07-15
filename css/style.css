@@ -1191,3 +1191,28 @@ grid-template-columns:1fr;
     }
 
 }
+
+/* ==========================================
+   LOGO
+========================================== */
+
+.logo-link{
+
+    display:flex;
+
+    align-items:center;
+
+    text-decoration:none;
+
+}
+
+
+.logo-link img{
+
+    width:55px;
+
+    height:55px;
+
+    object-fit:contain;
+
+}
