@@ -284,19 +284,99 @@ transform:translateX(100%);
   font-family: "Space Grotesk";
   margin-bottom: 20px;
 }
-@media (max-width: 900px) {
-  nav {
-    display: none;
-  }
-  .hero {
-    grid-template-columns: 1fr;
-  }
-  .hero h1 {
-    font-size: 3rem;
-  }
-  .buttons {
-    flex-direction: column;
-  }
+/* ==========================================
+   MOBILE HEADER FIX
+========================================== */
+
+@media(max-width:900px){
+
+
+    .nav{
+
+        flex-direction:column;
+
+        align-items:center;
+
+        justify-content:center;
+
+        padding:25px 5%;
+
+        gap:25px;
+
+    }
+
+
+
+    .brand{
+
+        width:100%;
+
+        justify-content:center;
+
+        text-align:center;
+
+        flex-direction:column;
+
+        gap:12px;
+
+    }
+
+
+
+    .logo-link img{
+
+        width:240px;
+
+        max-width:80vw;
+
+    }
+
+
+
+    .brand h2{
+
+        font-size:1.4rem;
+
+    }
+
+
+
+    .brand p{
+
+        font-size:.85rem;
+
+    }
+
+
+
+    nav{
+
+        width:100%;
+
+        display:flex;
+
+        flex-direction:column;
+
+        align-items:center;
+
+        gap:10px;
+
+    }
+
+
+
+    nav a{
+
+        width:90%;
+
+        text-align:center;
+
+        padding:12px;
+
+        font-size:1rem;
+
+    }
+
 }
 
 
@@ -1214,5 +1294,324 @@ grid-template-columns:1fr;
     height:55px;
 
     object-fit:contain;
+
+}
+
+/* ==========================================
+   MOBILE MENU BUTTON
+========================================== */
+
+
+.menu-toggle{
+
+    display:none;
+
+    background:none;
+
+    border:none;
+
+    color:white;
+
+    font-size:2rem;
+
+    cursor:pointer;
+
+}
+
+
+
+/* ==========================================
+   MOBILE HAMBURGER MENU
+========================================== */
+
+
+.menu-toggle{
+
+    display:none;
+
+    background:none;
+
+    border:none;
+
+    cursor:pointer;
+
+    width:45px;
+
+    height:40px;
+
+    position:relative;
+
+}
+
+
+
+.menu-toggle span{
+
+    display:block;
+
+    height:3px;
+
+    width:30px;
+
+    background:white;
+
+    margin:6px auto;
+
+    border-radius:10px;
+
+    transition:.3s ease;
+
+}
+
+
+
+
+@media(max-width:900px){
+
+
+    .nav{
+
+        position:relative;
+
+    }
+
+
+    .menu-toggle{
+
+        display:block;
+
+    }
+
+
+    .mobile-menu{
+
+        position:absolute;
+
+        top:100%;
+
+        left:0;
+
+        width:100%;
+
+
+        display:flex;
+
+        flex-direction:column;
+
+        gap:10px;
+
+
+        background:rgba(17,24,39,.96);
+
+        backdrop-filter:blur(15px);
+
+
+        padding:25px;
+
+
+        transform:translateY(-20px);
+
+        opacity:0;
+
+        pointer-events:none;
+
+
+        transition:.35s ease;
+
+    }
+
+
+
+    .mobile-menu.active{
+
+        transform:translateY(0);
+
+        opacity:1;
+
+        pointer-events:auto;
+
+    }
+
+
+
+    .mobile-menu a{
+
+        text-align:center;
+
+        padding:15px;
+
+        border-radius:12px;
+
+    }
+
+
+}
+
+.menu-toggle.open span:nth-child(1){
+
+    transform:translateY(9px) rotate(45deg);
+
+}
+
+
+.menu-toggle.open span:nth-child(2){
+
+    opacity:0;
+
+}
+
+
+.menu-toggle.open span:nth-child(3){
+
+    transform:translateY(-9px) rotate(-45deg);
+
+}
+
+/* ==========================================
+   REQUEST QUOTE PAGE
+========================================== */
+
+
+.project-options{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:25px;
+
+    margin:40px 0 60px;
+
+}
+
+
+
+.option-card{
+
+    background:#1A2230;
+
+    color:white;
+
+    padding:30px;
+
+    border-radius:20px;
+
+    font-family:"Space Grotesk";
+
+    font-size:1.15rem;
+
+    text-align:center;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    transition:.3s ease;
+
+}
+
+
+
+.option-card:hover{
+
+    transform:translateY(-6px);
+
+    box-shadow:0 15px 40px rgba(0,0,0,.25);
+
+}
+
+
+
+.quote-form{
+
+    max-width:750px;
+
+    margin-top:40px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:15px;
+
+}
+
+
+
+.quote-form label{
+
+    font-weight:600;
+
+    margin-top:15px;
+
+}
+
+
+
+.quote-form input,
+
+.quote-form textarea,
+
+.quote-form select{
+
+    width:100%;
+
+    padding:16px;
+
+    border-radius:12px;
+
+    border:1px solid #D5D5D5;
+
+    font-family:Inter,sans-serif;
+
+    font-size:1rem;
+
+}
+
+
+
+.quote-form textarea{
+
+    resize:vertical;
+
+}
+
+
+
+.quote-form input:focus,
+
+.quote-form textarea:focus,
+
+.quote-form select:focus{
+
+    outline:none;
+
+    border-color:#2F8CFF;
+
+}
+
+
+
+.quote-form button{
+
+    margin-top:25px;
+
+    border:none;
+
+    cursor:pointer;
+
+    font-size:1rem;
+
+}
+
+
+
+@media(max-width:900px){
+
+
+    .project-options{
+
+        grid-template-columns:1fr;
+
+    }
+
 
 }
