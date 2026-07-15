@@ -1,0 +1,1 @@
+console.log('PlasticBlocks3D starter loaded');
