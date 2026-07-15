@@ -2637,31 +2637,26 @@ input[type="file"] {
 
 
 /* =========================================================
-   ANALYTICS
+   ANALYTICS DASHBOARD
 ========================================================= */
 
 
 .analytics-card {
 
+    background:#171c24;
 
-    background:
-
-    var(--card);
-
+    color:white;
 
     padding:35px;
 
-
     border-radius:22px;
 
-
-    border:
-
-    1px solid var(--border);
-
+    border:1px solid rgba(255,255,255,.08);
 
     margin-top:40px;
 
+    box-shadow:
+    0 15px 40px rgba(0,0,0,.25);
 
 }
 
@@ -2669,27 +2664,94 @@ input[type="file"] {
 
 .analytics-card h2 {
 
-
     color:white;
 
+    margin-bottom:20px;
 
 }
 
 
 
-.analytics-number {
+.analytics-card p {
 
+    color:#b8c4d3;
+
+}
+
+
+
+
+
+.analytics-number {
 
     font-size:3rem;
 
+    font-family:"Space Grotesk";
 
-    color:var(--accent);
+    font-weight:700;
+
+    color:#4b9eff;
+
+}
 
 
-    font-family:
 
-    "Space Grotesk";
 
+
+.analytics-label {
+
+    color:#9ca3af;
+
+}
+
+
+
+
+
+.analytics-stats {
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(4,1fr);
+
+    gap:20px;
+
+    margin-bottom:30px;
+
+}
+
+
+
+
+
+.analytics-stat {
+
+    background:#202733;
+
+    padding:25px;
+
+    border-radius:16px;
+
+    border:1px solid rgba(255,255,255,.08);
+
+}
+
+
+
+.analytics-stat h3 {
+
+    color:#4b9eff;
+
+    font-size:2rem;
+
+}
+
+
+
+.analytics-stat p {
+
+    color:#cbd5e1;
 
 }
 
@@ -2699,15 +2761,11 @@ input[type="file"] {
 
 #visitorChart {
 
+    background:#202733;
 
-    width:100% !important;
+    border-radius:15px;
 
-
-    max-height:350px;
-
-
-    margin-top:30px;
-
+    padding:15px;
 
 }
 
@@ -3100,6 +3158,322 @@ input[type="file"] {
 
 }
 
+
+
+}
+
+/* =====================================================
+   ADMIN DASHBOARD
+===================================================== */
+
+
+.admin-page {
+
+    padding:60px 0;
+
+}
+
+
+
+.dashboard-stats {
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(6,1fr);
+
+    gap:20px;
+
+    margin-bottom:40px;
+
+}
+
+
+
+.stat-card {
+
+    background:#171c24;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    padding:25px;
+
+    border-radius:18px;
+
+    text-align:center;
+
+}
+
+
+
+.stat-card h2 {
+
+    color:#4b9eff;
+
+    font-size:2.5rem;
+
+}
+
+
+
+.stat-card p {
+
+    color:#cbd5e1;
+
+}
+
+
+
+
+
+.admin-toolbar {
+
+    display:flex;
+
+    gap:20px;
+
+    margin-bottom:30px;
+
+}
+
+
+
+.admin-toolbar input,
+.admin-toolbar select {
+
+    padding:14px;
+
+    border-radius:10px;
+
+    border:none;
+
+}
+
+
+
+
+
+
+
+.admin-layout {
+
+    display:grid;
+
+    grid-template-columns:
+
+    1fr 1.3fr;
+
+    gap:30px;
+
+}
+
+
+
+
+
+.request-column,
+.details-column {
+
+
+    background:#171c24;
+
+    padding:30px;
+
+    border-radius:20px;
+
+}
+
+
+
+.quote-card {
+
+
+    background:#202733;
+
+    padding:20px;
+
+    margin-bottom:15px;
+
+    border-radius:14px;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+
+}
+
+
+
+.quote-card:hover {
+
+    transform:translateY(-3px);
+
+}
+
+
+
+.status-badge {
+
+
+    display:inline-block;
+
+    padding:5px 12px;
+
+    border-radius:20px;
+
+    background:#2f8cff;
+
+    color:white;
+
+    font-size:.85rem;
+
+}
+
+
+
+
+
+.details-card {
+
+
+    background:#202733;
+
+    padding:30px;
+
+    border-radius:18px;
+
+
+}
+
+
+
+.details-card h3 {
+
+    margin-top:25px;
+
+}
+
+
+
+.admin-actions {
+
+
+    display:flex;
+
+    gap:15px;
+
+    margin-top:20px;
+
+
+}
+
+
+
+.archive-button {
+
+
+    background:#ef4444;
+
+    color:white;
+
+    border:none;
+
+    padding:14px 22px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+}
+
+
+
+
+
+
+
+.analytics-card {
+
+
+    margin-top:40px;
+
+    background:#171c24;
+
+    padding:35px;
+
+    border-radius:20px;
+
+
+}
+
+
+
+.analytics-grid {
+
+
+    display:grid;
+
+    grid-template-columns:
+
+    repeat(2,1fr);
+
+    gap:20px;
+
+
+}
+
+
+
+.analytics-grid div {
+
+
+    background:#202733;
+
+    padding:25px;
+
+    border-radius:15px;
+
+
+}
+
+
+
+.analytics-grid h3 {
+
+    color:#4b9eff;
+
+    font-size:2.5rem;
+
+}
+
+
+
+
+
+@media(max-width:900px){
+
+
+.dashboard-stats {
+
+grid-template-columns:
+repeat(2,1fr);
+
+}
+
+
+.admin-layout {
+
+grid-template-columns:1fr;
+
+}
+
+
+.admin-toolbar {
+
+flex-direction:column;
+
+}
 
 
 }

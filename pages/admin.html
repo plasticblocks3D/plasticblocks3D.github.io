@@ -8,7 +8,11 @@
 
 <title>Admin Dashboard | PlasticBlocks3D</title>
 
+<link rel="icon" type="image/png" href="../images/logos/logo.png">
+
 <link rel="stylesheet" href="../css/style.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
 
 </head>
 
@@ -21,10 +25,9 @@
 
 <div class="brand">
 
-
 <a href="../index.html" class="logo-link">
 
-<img src="../images/logos/logo.png" alt="PlasticBlocks3D Logo">
+<img src="../images/logos/logo.png">
 
 </a>
 
@@ -47,9 +50,7 @@ Admin Dashboard
 
 
 <button id="logoutButton" class="primary">
-
 Logout
-
 </button>
 
 
@@ -63,18 +64,15 @@ Logout
 
 <div class="container">
 
-
 <h1>
-Admin Dashboard
+Project Management
 </h1>
-
 
 <p class="intro-text">
 
-Manage requests, customers, and website activity.
+Manage customer requests, quotes, printing jobs, and website activity.
 
 </p>
-
 
 </div>
 
@@ -86,7 +84,7 @@ Manage requests, customers, and website activity.
 
 
 
-<section class="page-content">
+<section class="admin-page">
 
 
 <div class="container">
@@ -95,182 +93,45 @@ Manage requests, customers, and website activity.
 
 
 
-<!-- WEBSITE ANALYTICS -->
-
-
-<h2>
-Website Analytics
-</h2>
-
+<!-- SUMMARY -->
 
 <div class="dashboard-stats">
 
 
-
 <div class="stat-card">
-
-<h2 id="totalVisitors">
-0
-</h2>
-
-<p>
-Total Visitors
-</p>
-
+<h2 id="newCount">0</h2>
+<p>New</p>
 </div>
-
-
 
 
 <div class="stat-card">
-
-<h2 id="todayVisitors">
-0
-</h2>
-
-<p>
-Today's Visitors
-</p>
-
+<h2 id="reviewCount">0</h2>
+<p>Reviewing</p>
 </div>
-
-
 
 
 <div class="stat-card">
-
-<h2 id="totalViews">
-0
-</h2>
-
-<p>
-Total Page Views
-</p>
-
+<h2 id="quoteCount">0</h2>
+<p>Quoted</p>
 </div>
-
-
-
-</div>
-
-
-
-
-
-<div class="analytics-card">
-
-
-<h3>
-Visitors By Hour
-</h3>
-
-
-<canvas id="visitorChart"></canvas>
-
-
-</div>
-
-
-
-
-
-
-
-<!-- REQUEST COUNTERS -->
-
-
-<h2>
-Quote Requests
-</h2>
-
-
-
-<div class="dashboard-stats">
-
 
 
 <div class="stat-card">
-
-<h2 id="newCount">
-0
-</h2>
-
-<p>
-New
-</p>
-
+<h2 id="printingCount">0</h2>
+<p>Printing</p>
 </div>
-
 
 
 <div class="stat-card">
-
-<h2 id="reviewCount">
-0
-</h2>
-
-<p>
-Reviewing
-</p>
-
+<h2 id="completeCount">0</h2>
+<p>Completed</p>
 </div>
-
 
 
 <div class="stat-card">
-
-<h2 id="quoteCount">
-0
-</h2>
-
-<p>
-Quoted
-</p>
-
+<h2 id="archiveCount">0</h2>
+<p>Archived</p>
 </div>
-
-
-
-<div class="stat-card">
-
-<h2 id="printingCount">
-0
-</h2>
-
-<p>
-Printing
-</p>
-
-</div>
-
-
-
-<div class="stat-card">
-
-<h2 id="completeCount">
-0
-</h2>
-
-<p>
-Completed
-</p>
-
-</div>
-
-
-
-<div class="stat-card">
-
-<h2 id="archiveCount">
-0
-</h2>
-
-<p>
-Archived
-</p>
-
-</div>
-
 
 
 </div>
@@ -281,17 +142,16 @@ Archived
 
 
 
-<!-- SEARCH TOOLS -->
+<!-- SEARCH -->
 
-
-<div class="admin-tools">
+<div class="admin-toolbar">
 
 
 <input
 
 id="searchQuotes"
 
-placeholder="Search requests..."
+placeholder="Search customers or projects..."
 
 >
 
@@ -342,6 +202,39 @@ Archived
 </select>
 
 
+</div>
+
+
+
+
+
+
+
+
+<div class="admin-layout">
+
+
+
+
+
+<!-- REQUEST LIST -->
+
+<div class="request-column">
+
+
+<h2>
+Requests
+</h2>
+
+
+<div id="quotes">
+
+
+Loading...
+
+
+</div>
+
 
 </div>
 
@@ -351,37 +244,95 @@ Archived
 
 
 
-<!-- REQUEST GRID -->
+<!-- DETAILS -->
+
+<div class="details-column">
 
 
-<div id="quotes" class="quote-grid">
-
-
-Loading requests...
-
-
-</div>
-
-
-
-
-
-
-
-<!-- EXPANDED DETAILS -->
+<h2>
+Project Details
+</h2>
 
 
 <div id="detailsPanel" class="details-panel">
 
 
+<p>
+Select a request to view details.
+</p>
+
+
+</div>
+
+
+</div>
+
+
+
+
 </div>
 
 
 
 
 
+
+
+
+<!-- ANALYTICS -->
+
+
+<div class="analytics-card">
+
+
+<h2>
+Website Analytics
+</h2>
+
+
+
+<div class="analytics-grid">
+
+
+<div>
+
+<h3 id="totalVisitors">
+0
+</h3>
+
+<p>Total Visitors</p>
+
 </div>
 
+
+<div>
+
+<h3 id="todayVisitors">
+0
+</h3>
+
+<p>Today</p>
+
+</div>
+
+
+</div>
+
+
+
+<canvas id="visitorChart"></canvas>
+
+
+
+</div>
+
+
+
+
+
+
+
+</div>
 
 </section>
 
@@ -390,17 +341,16 @@ Loading requests...
 
 
 
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script src="../js/supabase.js"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<script src="../js/supabase.js"></script>
 
 <script src="../js/admin.js"></script>
 
 
 </body>
-
 
 </html>

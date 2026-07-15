@@ -1,7 +1,28 @@
+console.log("ADMIN DASHBOARD LOADED");
+
+
+let allQuotes = [];
+
+let visitorChart = null;
+
+let selectedQuote = null;
+
+
+
+
+
+// =====================================================
+// CHECK LOGIN
+// =====================================================
+
+
 async function checkAdmin(){
 
 
-const {data} = await supabaseClient.auth.getSession();
+const {data}=
+
+await supabaseClient.auth.getSession();
+
 
 
 if(!data.session){
@@ -11,6 +32,7 @@ window.location.href="login.html";
 }
 
 
+
 }
 
 
@@ -18,37 +40,41 @@ checkAdmin();
 
 
 
-console.log("ADMIN JS LOADED");
-
-
-
-let allQuotes = [];
 
 
 
 
-
-// =============================
-// LOAD QUOTE REQUESTS
-// =============================
+// =====================================================
+// LOAD QUOTES
+// =====================================================
 
 
 async function loadQuotes(){
 
 
-const {data,error} = await supabaseClient
+const {data,error}=
+
+await supabaseClient
 
 .from("quote_requests")
 
 .select("*")
 
-.order("created_at",{ascending:false});
+.order(
+"created_at",
+{
+ascending:false
+}
+);
 
 
 
 if(error){
 
-console.error(error);
+console.error(
+"Quote loading error:",
+error
+);
 
 return;
 
@@ -57,6 +83,7 @@ return;
 
 
 allQuotes=data;
+
 
 
 updateCounters();
@@ -72,40 +99,58 @@ displayQuotes(allQuotes);
 
 
 
-// =============================
-// DISPLAY REQUEST CARDS
-// =============================
+
+
+
+// =====================================================
+// DISPLAY REQUEST LIST
+// =====================================================
 
 
 function displayQuotes(quotes){
 
 
+const container =
 
-const container=document.getElementById("quotes");
+document.getElementById("quotes");
+
 
 
 container.innerHTML="";
 
 
 
+
 if(quotes.length===0){
 
-container.innerHTML="<p>No requests found.</p>";
+
+container.innerHTML=
+
+`
+<p>
+No requests found.
+</p>
+`;
 
 return;
 
+
 }
+
 
 
 
 quotes.forEach(quote=>{
 
 
+container.innerHTML +=
 
-container.innerHTML += `
 
+`
 
-<div class="quote-card" data-id="${quote.id}">
+<div class="quote-card"
+
+onclick="openQuote('${quote.id}')">
 
 
 <h3>
@@ -117,9 +162,10 @@ ${quote.project_name}
 
 <p>
 
-<b>${quote.name}</b>
+${quote.name}
 
 </p>
+
 
 
 <p>
@@ -130,47 +176,17 @@ ${quote.project_type}
 
 
 
-<p>
+<span class="status-badge">
 
-Status:
+${quote.status}
 
-<select class="status-select" data-id="${quote.id}">
-
-
-${createOption("New",quote.status)}
-
-${createOption("Reviewing",quote.status)}
-
-${createOption("Quoted",quote.status)}
-
-${createOption("Approved",quote.status)}
-
-${createOption("Printing",quote.status)}
-
-${createOption("Completed",quote.status)}
-
-${createOption("Archived",quote.status)}
-
-
-</select>
-
-
-</p>
-
-
-
-<button class="view-button">
-
-View Details
-
-</button>
+</span>
 
 
 
 </div>
 
 
-
 `;
 
 
@@ -185,163 +201,210 @@ View Details
 
 
 
-function createOption(value,current){
-
-
-return `
-
-<option ${value===current?"selected":""}>
-
-${value}
-
-</option>
-
-`;
 
 
 
-}
+// =====================================================
+// OPEN REQUEST DETAILS
+// =====================================================
+
+
+window.openQuote=function(id){
 
 
 
+selectedQuote =
 
-
-// =============================
-// DETAILS PANEL
-// =============================
-
-
-document.addEventListener("click",function(event){
+allQuotes.find(
+q=>q.id==id
+);
 
 
 
-if(event.target.classList.contains("view-button")){
+const panel=
 
-
-const card =
-event.target.closest(".quote-card");
-
-
-const id =
-card.dataset.id;
+document.getElementById(
+"detailsPanel"
+);
 
 
 
-const quote =
-allQuotes.find(q=>q.id==id);
+panel.innerHTML=
 
 
-
-showDetails(quote);
-
-
-
-}
-
-
-
-});
-
-
-
-
-
-function showDetails(quote){
-
-
-
-const panel =
-document.getElementById("detailsPanel");
-
-
-
-panel.innerHTML=`
-
+`
 
 <div class="details-card">
 
 
 <h2>
 
-${quote.project_name}
+${selectedQuote.project_name}
 
 </h2>
 
 
 
+
 <p>
+
 <b>Customer:</b>
-${quote.name}
+
+${selectedQuote.name}
+
 </p>
 
 
 
 <p>
+
 <b>Email:</b>
-${quote.email}
+
+<a href="mailto:${selectedQuote.email}">
+
+${selectedQuote.email}
+
+</a>
+
 </p>
+
 
 
 
 <p>
-<b>Type:</b>
-${quote.project_type}
+
+<b>Project Type:</b>
+
+${selectedQuote.project_type}
+
 </p>
 
+
+
+
+<h3>
+Description
+</h3>
 
 
 <p>
-<b>Description:</b>
+
+${selectedQuote.details}
+
 </p>
 
-<p>
-${quote.details}
-</p>
 
 
 
-<p>
-<b>Files:</b>
-</p>
 
+<h3>
+Files
+</h3>
+
+
+<div>
 
 ${
-
-quote.file_link
+selectedQuote.file_link
 
 ?
 
-quote.file_link
+selectedQuote.file_link
+
 .split("\n")
-.map(file=>`
 
-<a href="${file}" target="_blank">
+.map(file=>
 
-Open File
 
-</a><br>
+`
 
-`)
-.join("")
+<a
 
-:
+class="file-button"
 
-"No files"
+href="${file}"
 
-}
+target="_blank">
 
+📎 Open File
+
+</a>
 
 
 <br>
 
 
-<button 
-class="archive-button"
-data-id="${quote.id}">
+`
 
-Archive Request
+)
+
+.join("")
+
+:
+
+"No files uploaded"
+
+}
+
+
+</div>
+
+
+
+
+
+
+
+<h3>
+Project Status
+</h3>
+
+
+
+<select
+
+id="statusEditor"
+
+class="status-select">
+
+
+${createStatusOptions(selectedQuote.status)}
+
+
+</select>
+
+
+
+
+
+<div class="admin-actions">
+
+
+<button
+
+class="primary"
+
+onclick="saveStatus()">
+
+Save Status
 
 </button>
+
+
+
+<button
+
+class="archive-button"
+
+onclick="archiveQuote()">
+
+Archive
+
+</button>
+
+
+
+</div>
 
 
 
@@ -362,38 +425,216 @@ Archive Request
 
 
 
-// =============================
-// UPDATE STATUS
-// =============================
+function createStatusOptions(current){
 
 
-document.addEventListener("change",async function(event){
+let statuses=[
+
+"New",
+
+"Reviewing",
+
+"Quoted",
+
+"Approved",
+
+"Printing",
+
+"Completed",
+
+"Archived"
+
+];
+
+
+return statuses.map(status=>
+
+
+`
+
+<option
+
+value="${status}"
+
+${status===current?"selected":""}>
+
+${status}
+
+</option>
+
+
+`
+
+).join("");
 
 
 
-if(event.target.classList.contains("status-select")){
-
-
-const id =
-event.target.dataset.id;
-
-
-const status =
-event.target.value;
+}
 
 
 
-const {error}=await supabaseClient
+
+
+
+
+
+
+// =====================================================
+// SAVE STATUS
+// =====================================================
+
+
+window.saveStatus=async function(){
+
+
+
+if(!selectedQuote){
+
+return;
+
+}
+
+
+
+const status=
+
+document.getElementById(
+"statusEditor"
+).value;
+
+
+
+
+
+const {error}=
+
+await supabaseClient
 
 .from("quote_requests")
 
 .update({
 
-status:status
+status:status,
+
+updated_at:new Date()
 
 })
 
-.eq("id",id);
+.eq(
+
+"id",
+
+selectedQuote.id
+
+);
+
+
+
+
+
+if(error){
+
+
+console.error(error);
+
+
+alert(
+"Could not save status."
+);
+
+
+return;
+
+
+}
+
+
+
+
+alert(
+"Status updated!"
+);
+
+
+
+await loadQuotes();
+
+
+
+openQuote(selectedQuote.id);
+
+
+
+}
+
+
+
+
+
+
+
+
+
+// =====================================================
+// ARCHIVE REQUEST
+// =====================================================
+
+
+window.archiveQuote=async function(){
+
+
+
+if(!selectedQuote){
+
+return;
+
+}
+
+
+
+let confirmArchive=
+
+confirm(
+
+"Archive this project?"
+
+);
+
+
+
+if(!confirmArchive){
+
+return;
+
+}
+
+
+
+
+
+const {error}=
+
+await supabaseClient
+
+.from("quote_requests")
+
+.update({
+
+status:"Archived",
+
+updated_at:new Date()
+
+})
+
+.eq(
+
+"id",
+
+selectedQuote.id
+
+);
+
+
 
 
 
@@ -401,123 +642,98 @@ if(error){
 
 console.error(error);
 
-alert("Update failed");
+alert(
+"Could not archive."
+);
+
+return;
 
 }
 
-else{
 
-console.log("Status updated");
+
+
+
+alert(
+"Project archived."
+);
+
+
+
+document
+
+.getElementById(
+"detailsPanel"
+)
+
+.innerHTML=
+
+`
+
+<p>
+Select a request to view details.
+</p>
+
+`;
+
+
 
 loadQuotes();
 
-}
-
-
-
-}
-
-
-
-});
-
-
-
-
-
-
-
-
-// =============================
-// ARCHIVE
-// =============================
-
-
-document.addEventListener("click",async function(event){
-
-
-
-if(event.target.classList.contains("archive-button")){
-
-
-const id =
-event.target.dataset.id;
-
-
-
-const {error}=await supabaseClient
-
-.from("quote_requests")
-
-.update({
-
-status:"Archived"
-
-})
-
-.eq("id",id);
-
-
-
-if(error){
-
-console.error(error);
-
-}
-
-else{
-
-loadQuotes();
-
-}
-
 
 
 }
 
 
 
-});
 
 
 
 
 
-
-
-
-
-// =============================
+// =====================================================
 // COUNTERS
-// =============================
+// =====================================================
 
 
 function updateCounters(){
 
 
 
-document.getElementById("newCount").textContent =
+document.getElementById("newCount").textContent=
+
 countStatus("New");
 
 
-document.getElementById("reviewCount").textContent =
+
+document.getElementById("reviewCount").textContent=
+
 countStatus("Reviewing");
 
 
-document.getElementById("quoteCount").textContent =
+
+document.getElementById("quoteCount").textContent=
+
 countStatus("Quoted");
 
 
-document.getElementById("printingCount").textContent =
+
+document.getElementById("printingCount").textContent=
+
 countStatus("Printing");
 
 
-document.getElementById("completeCount").textContent =
+
+document.getElementById("completeCount").textContent=
+
 countStatus("Completed");
 
 
-document.getElementById("archiveCount").textContent =
+
+document.getElementById("archiveCount").textContent=
+
 countStatus("Archived");
+
 
 
 }
@@ -527,7 +743,11 @@ countStatus("Archived");
 function countStatus(status){
 
 
-return allQuotes.filter(q=>q.status===status).length;
+return allQuotes.filter(
+
+quote=>quote.status===status
+
+).length;
 
 
 }
@@ -539,77 +759,113 @@ return allQuotes.filter(q=>q.status===status).length;
 
 
 
-// =============================
-// SEARCH + FILTER
-// =============================
+
+// =====================================================
+// SEARCH
+// =====================================================
 
 
 document
+
 .getElementById("searchQuotes")
-.addEventListener("input",filterQuotes);
 
+.addEventListener(
+
+"input",
+
+function(){
+
+
+
+let search=
+
+this.value.toLowerCase();
+
+
+
+
+let filtered=
+
+allQuotes.filter(quote=>
+
+
+
+quote.project_name
+
+.toLowerCase()
+
+.includes(search)
+
+
+
+||
+
+quote.name
+
+.toLowerCase()
+
+.includes(search)
+
+
+
+||
+
+quote.email
+
+.toLowerCase()
+
+.includes(search)
+
+
+
+);
+
+
+
+displayQuotes(filtered);
+
+
+
+}
+
+);
+
+
+
+
+
+
+
+
+
+// =====================================================
+// FILTER
+// =====================================================
 
 
 document
+
 .getElementById("statusFilter")
-.addEventListener("change",filterQuotes);
+
+.addEventListener(
+
+"change",
+
+function(){
 
 
 
-
-
-function filterQuotes(){
-
-
-
-const search =
-document.getElementById("searchQuotes")
-.value
-.toLowerCase();
+let filter=this.value;
 
 
 
-const filter =
-document.getElementById("statusFilter")
-.value;
+if(filter==="all"){
 
 
-
-let results =
-allQuotes.filter(q=>{
+displayQuotes(allQuotes);
 
 
-
-let matchesSearch =
-
-q.project_name.toLowerCase().includes(search)
-
-||
-
-q.name.toLowerCase().includes(search);
-
-
-
-let matchesStatus =
-
-filter==="all"
-
-||
-
-q.status===filter;
-
-
-
-return matchesSearch && matchesStatus;
-
-
-
-});
-
-
-
-displayQuotes(results);
-
+return;
 
 
 }
@@ -617,98 +873,242 @@ displayQuotes(results);
 
 
 
+displayQuotes(
+
+allQuotes.filter(
+
+quote=>
+
+quote.status===filter
+
+)
+
+);
+
+
+
+}
+
+);
 
 
 
 
-// =============================
-// VISITOR ANALYTICS
-// =============================
+
+
+
+
+
+// =====================================================
+// LOGOUT
+// =====================================================
+
+
+document
+
+.getElementById("logoutButton")
+
+.addEventListener(
+
+"click",
+
+async()=>{
+
+
+await supabaseClient.auth.signOut();
+
+
+window.location.href="login.html";
+
+
+}
+
+);
+
+
+
+
+
+
+
+
+
+// =====================================================
+// ANALYTICS
+// =====================================================
 
 
 async function loadAnalytics(){
 
 
 
-const {data,error}=await supabaseClient
+const {data,error}=
+
+await supabaseClient
 
 .from("site_visits")
 
-.select("*");
+.select("created_at");
+
+
 
 
 
 if(error){
 
-console.error(error);
+
+console.error(
+"Analytics error:",
+error
+);
+
 
 return;
+
 
 }
 
 
 
-document.getElementById("totalViews")
+
+document.getElementById(
+
+"totalVisitors"
+
+)
+
 .textContent=data.length;
 
 
 
-const visitors =
-[...new Set(data.map(v=>v.visitor_id))];
 
 
-document.getElementById("totalVisitors")
-.textContent=
-visitors.length;
+let today=
 
-
-
-
-const today =
 new Date()
-.toISOString()
-.split("T")[0];
+
+.toDateString();
 
 
 
-const todayVisits =
-data.filter(v=>v.date===today);
 
 
+document.getElementById(
 
-document.getElementById("todayVisitors")
+"todayVisitors"
+
+)
+
 .textContent=
-todayVisits.length;
+
+
+data.filter(v=>
+
+new Date(
+v.created_at
+)
+
+.toDateString()===today
+
+).length;
 
 
 
 
-let hours = Array(24).fill(0);
+
+
+let hours=
+
+Array(24).fill(0);
+
+
 
 
 
 data.forEach(v=>{
 
-hours[v.hour]++;
+
+let hour=
+
+new Date(
+
+v.created_at
+
+)
+
+.getHours();
+
+
+
+hours[hour]++;
+
+
 
 });
 
 
 
 
+
+
+if(visitorChart){
+
+visitorChart.destroy();
+
+}
+
+
+
+
+
+
+visitorChart=
+
 new Chart(
 
-document.getElementById("visitorChart"),
+document.getElementById(
+
+"visitorChart"
+
+),
 
 {
 
+
 type:"bar",
+
 
 data:{
 
-labels:
 
-hours.map((x,i)=>i+":00"),
+labels:[
+
+"12AM",
+"1AM",
+"2AM",
+"3AM",
+"4AM",
+"5AM",
+"6AM",
+"7AM",
+"8AM",
+"9AM",
+"10AM",
+"11AM",
+"12PM",
+"1PM",
+"2PM",
+"3PM",
+"4PM",
+"5PM",
+"6PM",
+"7PM",
+"8PM",
+"9PM",
+"10PM",
+"11PM"
+
+],
 
 
 datasets:[{
@@ -719,7 +1119,10 @@ data:hours
 
 }]
 
+
 }
+
+
 
 }
 
@@ -735,31 +1138,10 @@ data:hours
 
 
 
-// =============================
-// LOGOUT
-// =============================
 
-
-document
-
-.getElementById("logoutButton")
-
-.addEventListener("click",async()=>{
-
-
-await supabaseClient.auth.signOut();
-
-
-window.location.href="login.html";
-
-
-});
-
-
-
-
-
-
+// =====================================================
+// START
+// =====================================================
 
 
 loadQuotes();
