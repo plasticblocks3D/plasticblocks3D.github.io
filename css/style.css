@@ -98,13 +98,78 @@ nav a.active{
   border-radius: 12px;
 }
 .cta,
-.primary {
-  background: var(--accent);
-  color: #fff;
+.primary{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:#2F8CFF;
+
+    color:white;
+
+    text-decoration:none;
+
+    padding:15px 28px;
+
+    border-radius:14px;
+
+    font-weight:600;
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        background .25s ease;
+
+    box-shadow:
+        0 12px 30px rgba(47,140,255,.25);
+
 }
-.secondary {
-  border: 1px solid var(--accent);
-  color: #fff;
+.cta:hover,
+.primary:hover{
+
+    transform:translateY(-3px);
+
+    background:#4B9EFF;
+
+    box-shadow:
+        0 20px 45px rgba(47,140,255,.35);
+
+}
+.secondary{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border:2px solid #2F8CFF;
+
+    color:white;
+
+    background:transparent;
+
+    text-decoration:none;
+
+    padding:15px 28px;
+
+    border-radius:14px;
+
+    transition:
+        background .25s ease,
+        transform .25s ease,
+        color .25s ease;
+
+}
+.secondary:hover{
+
+    background:#2F8CFF;
+
+    transform:translateY(-3px);
+
 }
 .hero {
   display: grid;
@@ -853,5 +918,109 @@ text-align:center;
 margin:auto;
 
 }
+
+}
+
+/* ==========================================
+   INTERIOR PAGES
+========================================== */
+
+.page-header{
+
+    background:linear-gradient(180deg,#111827,#0D1117);
+
+    color:white;
+
+    padding:120px 8% 90px;
+
+}
+
+.page-header h1{
+
+    font-family:"Space Grotesk",sans-serif;
+
+    font-size:4rem;
+
+    margin:20px 0;
+
+    line-height:1.05;
+
+}
+
+.page-header .intro-text{
+
+    color:#D7E3F3;
+
+    max-width:700px;
+
+}
+
+.page-content{
+
+    background:#F6F3EC;
+
+    color:#242424;
+
+    padding:90px 8%;
+
+}
+
+.page-content h2{
+
+    font-family:"Space Grotesk",sans-serif;
+
+    font-size:2.4rem;
+
+    margin-bottom:25px;
+
+}
+
+.page-content p{
+
+    max-width:800px;
+
+    line-height:1.9;
+
+    font-size:1.08rem;
+
+    color:#555;
+
+    margin-bottom:24px;
+
+}
+
+@media(max-width:900px){
+
+.page-header h1{
+
+font-size:2.8rem;
+
+}
+
+}
+
+.about-list{
+
+    list-style:none;
+
+    margin:35px 0 60px;
+
+    padding:0;
+
+}
+
+.about-list li{
+
+    background:white;
+
+    margin-bottom:16px;
+
+    padding:18px 24px;
+
+    border-radius:16px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.06);
+
+    font-size:1.05rem;
 
 }
