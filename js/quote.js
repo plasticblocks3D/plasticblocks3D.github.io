@@ -1,7 +1,6 @@
 console.log("QUOTE JS LOADED");
 
 
-
 document
 .getElementById("projectForm")
 .addEventListener("submit", async function(event){
@@ -10,32 +9,24 @@ document
 event.preventDefault();
 
 
-
-const button =
-this.querySelector("button");
-
+const button = this.querySelector("button");
 
 
 button.disabled = true;
-
-button.textContent =
-"Uploading...";
-
-
-
+button.textContent = "Uploading...";
 
 
 
 const name =
-document.getElementById("projectCustomerName").value;
+document.getElementById("projectCustomerName").value.trim();
 
 
 const email =
-document.getElementById("projectCustomerEmail").value;
+document.getElementById("projectCustomerEmail").value.trim();
 
 
 const projectName =
-document.getElementById("projectName").value;
+document.getElementById("projectName").value.trim();
 
 
 const projectType =
@@ -43,14 +34,11 @@ document.getElementById("projectType").value;
 
 
 const details =
-document.getElementById("projectDetails").value;
-
+document.getElementById("projectDetails").value.trim();
 
 
 const files =
 document.getElementById("projectFiles").files;
-
-
 
 
 
@@ -59,36 +47,38 @@ let uploadedLinks = [];
 
 
 
-
-// =============================
+// =====================================
 // UPLOAD FILES
-// =============================
+// =====================================
+
+
+try {
 
 
 for(const file of files){
 
 
 
+// Create safe filename
+
+const safeName = file.name
+.replace(/[^a-zA-Z0-9.-]/g, "_");
+
+
+
 const fileName =
 
 Date.now()
-
 +
-
 "-"
-
 +
-
-file.name.replace(/\s+/g,"-");
-
+safeName;
 
 
 
 
 
-const {error:uploadError}
-
-=
+const {error: uploadError} =
 
 await supabaseClient
 
@@ -100,7 +90,15 @@ await supabaseClient
 
 fileName,
 
-file
+file,
+
+{
+
+cacheControl:"3600",
+
+upsert:false
+
+}
 
 );
 
@@ -111,12 +109,57 @@ file
 if(uploadError){
 
 
-console.error(uploadError);
+console.error(
+"UPLOAD ERROR:",
+uploadError
+);
+
+
+throw uploadError;
+
+
+}
+
+
+
+
+const {data:urlData} =
+
+supabaseClient
+
+.storage
+
+.from("quote-files")
+
+.getPublicUrl(fileName);
+
+
+
+
+uploadedLinks.push(
+
+urlData.publicUrl
+
+);
+
+
+
+}
+
+
+}
+
+catch(error){
+
 
 
 alert(
 "File upload failed. Please try again."
 );
+
+
+
+console.error(error);
 
 
 
@@ -135,43 +178,11 @@ return;
 
 
 
-const {data:urlData}
-
-=
-
-supabaseClient
-
-.storage
-
-.from("quote-files")
-
-.getPublicUrl(fileName);
-
-
-
-
-
-uploadedLinks.push(
-
-urlData.publicUrl
-
-);
-
-
-
-}
-
-
-
-
-
 
 
 const fileLinks =
 
 uploadedLinks.join("\n");
-
-
 
 
 
@@ -186,16 +197,12 @@ button.textContent =
 
 
 
-
-// =============================
-// SAVE REQUEST
-// =============================
-
+// =====================================
+// SAVE QUOTE REQUEST
+// =====================================
 
 
-const {error}
-
-=
+const {error} =
 
 await supabaseClient
 
@@ -220,7 +227,6 @@ file_link:fileLinks,
 
 status:"New"
 
-
 }
 
 
@@ -235,13 +241,16 @@ status:"New"
 if(error){
 
 
-console.error(error);
+
+console.error(
+"DATABASE ERROR:",
+error
+);
+
 
 
 alert(
-
-"Something went wrong. Please try again."
-
+"Something went wrong submitting your request."
 );
 
 
@@ -264,18 +273,14 @@ return;
 
 
 
-// =============================
+// =====================================
 // SUCCESS
-// =============================
-
+// =====================================
 
 
 window.location.href =
 
 "../thank-you.html";
-
-
-
 
 
 
