@@ -4,54 +4,75 @@ console.log("QUOTE JS LOADED");
 const form = document.getElementById("projectForm");
 
 
-form.addEventListener("submit", async function(event){
+if (!form) {
 
-    event.preventDefault();
+    console.error("projectForm not found");
 
-
-    const button = this.querySelector("button");
-
-
-    button.disabled = true;
-    button.innerHTML = "Preparing request...";
+} else {
 
 
+form.addEventListener("submit", async function(event) {
 
-    const name = 
-    document.getElementById("projectCustomerName")
-    .value.trim();
+
+event.preventDefault();
+
+
+const button = form.querySelector("button");
+
+
+button.disabled = true;
+button.innerHTML = "Processing...";
+
+
+
+try {
+
+
+
+    // ===============================
+    // GET FORM VALUES
+    // ===============================
+
+
+    const name =
+        document.getElementById("projectCustomerName")
+        .value
+        .trim();
 
 
     const email =
-    document.getElementById("projectCustomerEmail")
-    .value.trim();
+        document.getElementById("projectCustomerEmail")
+        .value
+        .trim();
 
 
     const projectName =
-    document.getElementById("projectName")
-    .value.trim();
+        document.getElementById("projectName")
+        .value
+        .trim();
 
 
     const projectType =
-    document.getElementById("projectType")
-    .value;
+        document.getElementById("projectType")
+        .value;
 
 
     const details =
-    document.getElementById("projectDetails")
-    .value.trim();
+        document.getElementById("projectDetails")
+        .value
+        .trim();
 
 
     const fileInput =
-    document.getElementById("projectFiles");
+        document.getElementById("projectFiles");
 
 
     const files =
-    Array.from(fileInput.files || []);
+        fileInput ? Array.from(fileInput.files) : [];
 
 
 
-    let uploadedFiles = [];
+    console.log("Files:", files);
 
 
 
@@ -60,120 +81,92 @@ form.addEventListener("submit", async function(event){
     // ===============================
 
 
-    try{
-
-
-        if(files.length > 0){
-
-
-            for(let i = 0; i < files.length; i++){
-
-
-                const file = files[i];
-
-
-                button.innerHTML =
-                `Uploading ${i + 1}/${files.length}...`;
+    let fileLinks = [];
 
 
 
-                const cleanName =
-                file.name.replace(
-                    /[^a-zA-Z0-9._-]/g,
-                    "_"
-                );
+    for (let i = 0; i < files.length; i++) {
 
 
+        const file = files[i];
 
-                const path =
-                `${crypto.randomUUID()}-${cleanName}`;
-
-
-
-                const {error:uploadError} =
-
-                await supabaseClient
-
-                .storage
-
-                .from("quote-files")
-
-                .upload(
-                    path,
-                    file,
-                    {
-                        cacheControl:"3600",
-                        upsert:false
-                    }
-                );
-
-
-
-                if(uploadError){
-
-                    console.error(
-                        "Upload error:",
-                        uploadError
-                    );
-
-                    throw uploadError;
-
-                }
-
-
-
-                const {data:urlData} =
-
-                supabaseClient
-
-                .storage
-
-                .from("quote-files")
-
-                .getPublicUrl(path);
-
-
-
-                uploadedFiles.push({
-
-                    name:file.name,
-
-                    url:urlData.publicUrl
-
-                });
-
-
-
-            }
-
-
-        }
-
-
-    }
-
-
-    catch(error){
-
-
-        console.error(
-            "UPLOAD FAILED:",
-            error
-        );
-
-
-        alert(
-            "File upload failed. Check Supabase Storage permissions."
-        );
-
-
-        button.disabled=false;
 
         button.innerHTML =
-        "Request Quote";
+        `Uploading file ${i + 1}/${files.length}...`;
 
 
-        return;
+
+        const cleanName =
+            file.name.replace(
+                /[^a-zA-Z0-9.-]/g,
+                "_"
+            );
+
+
+
+        const filePath =
+            crypto.randomUUID()
+            + "-"
+            + cleanName;
+
+
+
+        console.log(
+            "Uploading:",
+            filePath
+        );
+
+
+
+        const upload =
+            await supabaseClient
+            .storage
+            .from("quote-files")
+            .upload(
+                filePath,
+                file,
+                {
+                    cacheControl:"3600",
+                    upsert:false
+                }
+            );
+
+
+
+        console.log(
+            "Upload result:",
+            upload
+        );
+
+
+
+        if (upload.error) {
+
+            throw upload.error;
+
+        }
+
+
+
+        const publicURL =
+            supabaseClient
+            .storage
+            .from("quote-files")
+            .getPublicUrl(filePath)
+            .data
+            .publicUrl;
+
+
+
+        console.log(
+            "File URL:",
+            publicURL
+        );
+
+
+
+        fileLinks.push(publicURL);
+
 
 
     }
@@ -181,58 +174,9 @@ form.addEventListener("submit", async function(event){
 
 
 
-    // ===============================
-    // PREPARE FILE LIST
-    // ===============================
-
-
-    const fileText =
-
-    uploadedFiles.length > 0
-
-    ?
-
-    uploadedFiles
-    .map(file =>
-        `${file.name}: ${file.url}`
-    )
-    .join("\n")
-
-
-    :
-
-    "No files uploaded";
-
-
-
-
-
-
-    console.log(
-        "Submitting quote:",
-        {
-
-            name:name,
-
-            email:email,
-
-            projectName:projectName,
-
-            projectType:projectType,
-
-            details:details,
-
-            files:uploadedFiles
-
-        }
-    );
-
-
-
-
 
     // ===============================
-    // SAVE REQUEST
+    // SAVE QUOTE REQUEST
     // ===============================
 
 
@@ -241,21 +185,12 @@ form.addEventListener("submit", async function(event){
 
 
 
-    const {
+    const databaseResult =
+        await supabaseClient
+        .from("quote_requests")
+        .insert([
 
-        data,
-
-        error
-
-    } = await supabaseClient
-
-
-    .from("quote_requests")
-
-
-    .insert([
-
-        {
+            {
 
             name:name,
 
@@ -267,62 +202,28 @@ form.addEventListener("submit", async function(event){
 
             details:details,
 
-            file_link:fileText,
+            file_link:
+                fileLinks.join("\n"),
 
             status:"New"
 
-        }
+            }
 
-    ])
-
-    .select();
-
-
-
+        ]);
 
 
 
     console.log(
-
-        "Database response:",
-
-        {
-
-            data:data,
-
-            error:error
-
-        }
-
+        "Database result:",
+        databaseResult
     );
 
 
 
+    if(databaseResult.error){
 
 
-
-    if(error){
-
-
-        console.error(
-            "DATABASE ERROR:",
-            error
-        );
-
-
-        alert(
-            "Could not submit request."
-        );
-
-
-        button.disabled=false;
-
-        button.innerHTML =
-        "Request Quote";
-
-
-        return;
-
+        throw databaseResult.error;
 
     }
 
@@ -331,25 +232,46 @@ form.addEventListener("submit", async function(event){
 
 
     alert(
-        uploadedFiles.length > 0
-
-        ?
-
-        `Your request was sent with ${uploadedFiles.length} uploaded file(s)!`
-
-        :
-
-        "Your request was sent!"
-
+        "Your project request was sent!"
     );
 
 
 
-
-
     window.location.href =
-    "../thank-you.html";
+        "../thank-you.html";
 
+
+
+
+}
+
+catch(error){
+
+
+    console.error(
+        "FINAL ERROR:",
+        error
+    );
+
+
+    alert(
+        "ERROR:\n\n"
+        +
+        error.message
+    );
+
+
+
+    button.disabled=false;
+
+    button.innerHTML =
+    "Request Quote";
+
+
+}
 
 
 });
+
+
+}
