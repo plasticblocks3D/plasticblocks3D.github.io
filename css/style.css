@@ -4678,3 +4678,61 @@ padding:10px;
 
 
 }
+
+/* =====================================
+   ADMIN EDIT FIELDS
+===================================== */
+
+
+.details-card input,
+.details-card textarea{
+
+    width:100%;
+
+    margin-top:10px;
+
+    padding:14px;
+
+    border-radius:12px;
+
+    border:none;
+
+    background:white;
+
+    color:#222;
+
+    font-family:"Inter",sans-serif;
+
+    font-size:1rem;
+
+}
+
+
+.details-card textarea{
+
+    resize:vertical;
+
+    min-height:120px;
+
+}
+
+
+
+.details-card label{
+
+    display:block;
+
+    margin-top:20px;
+
+    color:#cbd5e1;
+
+    font-weight:600;
+
+}
+
+
+.details-card .primary{
+
+    margin-top:20px;
+
+}

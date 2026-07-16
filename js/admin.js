@@ -7,24 +7,16 @@ let selectedQuote = null;
 
 let visitorChart = null;
 
-let activeStatusFilter = null;
-
-
-
-// =====================================================
-// START
-// =====================================================
 
 
 document.addEventListener(
 "DOMContentLoaded",
-async function(){
+async()=>{
 
 
-if(!await checkLogin()){
+if(!await checkAdmin()){
 return;
 }
-
 
 
 setupButtons();
@@ -33,14 +25,10 @@ setupSearch();
 
 setupFilter();
 
-setupStatusCards();
-
-
 
 await loadQuotes();
 
 await loadAnalytics();
-
 
 
 });
@@ -49,26 +37,17 @@ await loadAnalytics();
 
 
 
+// =============================
+// LOGIN CHECK
+// =============================
 
 
+async function checkAdmin(){
 
 
-// =====================================================
-// AUTH
-// =====================================================
+const {data,error}=
 
-
-async function checkLogin(){
-
-
-const {
-data,
-error
-}
-
-=
 await supabaseClient.auth.getSession();
-
 
 
 
@@ -84,8 +63,7 @@ return false;
 
 if(!data.session){
 
-window.location.href =
-"login.html";
+window.location.href="login.html";
 
 return false;
 
@@ -103,35 +81,28 @@ return true;
 
 
 
-
-
-
-// =====================================================
+// =============================
 // BUTTONS
-// =====================================================
+// =============================
 
 
 function setupButtons(){
 
 
 const logout =
-document.getElementById(
-"logoutButton"
-);
+document.getElementById("logoutButton");
 
 
 
 if(logout){
 
-
-logout.onclick = async()=>{
+logout.onclick=async()=>{
 
 
 await supabaseClient.auth.signOut();
 
 
-window.location.href =
-"login.html";
+window.location.href="login.html";
 
 
 };
@@ -144,16 +115,13 @@ window.location.href =
 
 
 const refresh =
-document.getElementById(
-"refreshButton"
-);
+document.getElementById("refreshButton");
 
 
 
 if(refresh){
 
-
-refresh.onclick = async()=>{
+refresh.onclick=async()=>{
 
 
 await loadQuotes();
@@ -167,7 +135,6 @@ await loadAnalytics();
 }
 
 
-
 }
 
 
@@ -178,9 +145,9 @@ await loadAnalytics();
 
 
 
-// =====================================================
+// =============================
 // LOAD QUOTES
-// =====================================================
+// =============================
 
 
 async function loadQuotes(){
@@ -188,11 +155,13 @@ async function loadQuotes(){
 
 
 const {
-data,
-error
-}
 
-=
+data,
+
+error
+
+}=
+
 await supabaseClient
 
 .from("quote_requests")
@@ -212,10 +181,7 @@ ascending:false
 
 if(error){
 
-console.error(
-"QUOTE LOAD ERROR:",
-error
-);
+console.error(error);
 
 return;
 
@@ -223,20 +189,13 @@ return;
 
 
 
-
-
-allQuotes =
-data || [];
-
+allQuotes=data || [];
 
 
 updateCounters();
 
 
-
-displayQuotes(
-allQuotes
-);
+displayQuotes(allQuotes);
 
 
 
@@ -250,19 +209,16 @@ allQuotes
 
 
 
-// =====================================================
-// DISPLAY QUOTES
-// =====================================================
+// =============================
+// DISPLAY LIST
+// =============================
 
 
 function displayQuotes(quotes){
 
 
-
 const box =
-document.getElementById(
-"quotes"
-);
+document.getElementById("quotes");
 
 
 
@@ -271,20 +227,17 @@ box.innerHTML="";
 
 
 
-
 if(quotes.length===0){
 
+box.innerHTML=
 
-box.innerHTML =
-"<p>No requests found.</p>";
-
+`
+<p>No requests found.</p>
+`;
 
 return;
 
-
 }
-
-
 
 
 
@@ -292,9 +245,9 @@ return;
 quotes.forEach(q=>{
 
 
+box.innerHTML +=
 
-box.innerHTML += `
-
+`
 
 <div class="quote-card"
 
@@ -302,39 +255,28 @@ onclick="openQuote('${q.id}')">
 
 
 <h3>
-
-${q.project_name}
-
+${q.project_name || "Unnamed Project"}
 </h3>
 
 
-
 <p>
-
-${q.name}
-
+${q.name || "Unknown"}
 </p>
 
 
-
 <p>
-
-${q.project_type}
-
+${q.project_type || ""}
 </p>
 
 
+<span class="status-badge">
 
-<span>
-
-${q.status}
+${q.status || "New"}
 
 </span>
 
 
-
 </div>
-
 
 `;
 
@@ -343,7 +285,6 @@ ${q.status}
 });
 
 
-
 }
 
 
@@ -354,21 +295,20 @@ ${q.status}
 
 
 
-// =====================================================
-// OPEN QUOTE
-// =====================================================
+// =============================
+// OPEN DETAILS
+// =============================
 
 
-window.openQuote =
-function(id){
+window.openQuote=function(id){
 
 
 
-selectedQuote =
+selectedQuote=
+
 allQuotes.find(
 q=>q.id==id
 );
-
 
 
 
@@ -379,7 +319,8 @@ return;
 
 
 
-const panel =
+const panel=
+
 document.getElementById(
 "detailsPanel"
 );
@@ -388,8 +329,11 @@ document.getElementById(
 
 
 
-panel.innerHTML = `
+panel.innerHTML=
 
+`
+
+<div class="details-card">
 
 
 <h2>
@@ -402,7 +346,8 @@ ${selectedQuote.project_name}
 
 <p>
 
-<b>Name:</b>
+<b>Customer:</b>
+
 ${selectedQuote.name}
 
 </p>
@@ -412,7 +357,12 @@ ${selectedQuote.name}
 <p>
 
 <b>Email:</b>
+
+<a href="mailto:${selectedQuote.email}">
+
 ${selectedQuote.email}
+
+</a>
 
 </p>
 
@@ -420,12 +370,20 @@ ${selectedQuote.email}
 
 <p>
 
-<b>Type:</b>
-${selectedQuote.project_type}
+<b>Submitted:</b>
+
+${new Date(
+selectedQuote.created_at
+)
+.toLocaleString()}
 
 </p>
 
 
+
+<h3>
+Description
+</h3>
 
 
 <p>
@@ -437,45 +395,124 @@ ${selectedQuote.details}
 
 
 
+
+
+<h3>
+Files
+</h3>
+
+
+${
+selectedQuote.file_link
+
+?
+
+selectedQuote.file_link
+
+.split("\n")
+
+.map(file=>
+
+`
+
+<a
+
+class="file-button"
+
+href="${file}"
+
+target="_blank">
+
+📎 Open File
+
+</a>
+
+<br>
+
+`
+
+)
+
+.join("")
+
+:
+
+"No files uploaded"
+
+}
+
+
+
+
+
+
+
+<h3>
+Quote Information
+</h3>
+
+
+<label>
+Estimated Price
+</label>
+
+
+<input
+
+id="priceEditor"
+
+type="number"
+
+value="${selectedQuote.price || ""}"
+
+placeholder="Example: 75"
+
+>
+
+
+
+
+
+<label>
+Internal Notes
+</label>
+
+
+<textarea
+
+id="notesEditor"
+
+rows="5"
+
+placeholder="Customer details, material, ideas..."
+
+>
+
+${selectedQuote.notes || ""}
+
+</textarea>
+
+
+
+
+
+
+
+<h3>
+Status
+</h3>
+
+
+
 <select id="statusEditor">
 
 
-<option>
-New
-</option>
-
-
-<option>
-Reviewing
-</option>
-
-
-<option>
-Quoted
-</option>
-
-
-<option>
-Approved
-</option>
-
-
-<option>
-Printing
-</option>
-
-
-<option>
-Completed
-</option>
-
-
-<option>
-Archived
-</option>
+${statusOptions(selectedQuote.status)}
 
 
 </select>
+
+
 
 
 
@@ -483,24 +520,138 @@ Archived
 
 
 
-<button onclick="saveStatus()">
+<button
 
-Save Status
+class="primary"
+
+onclick="saveQuote()">
+
+Save Changes
 
 </button>
 
+
+
+<button
+
+class="archive-button"
+
+onclick="archiveQuote()">
+
+Archive
+
+</button>
+
+
+
+</div>
 
 
 `;
 
 
 
+}
 
+
+
+
+
+
+
+
+
+function statusOptions(current){
+
+
+let list=[
+
+"New",
+
+"Reviewing",
+
+"Quoted",
+
+"Approved",
+
+"Printing",
+
+"Completed",
+
+"Archived"
+
+];
+
+
+
+return list.map(s=>
+
+
+`
+
+<option
+
+value="${s}"
+
+${s===current?"selected":""}>
+
+${s}
+
+</option>
+
+
+`
+
+).join("");
+
+
+
+}
+
+
+
+
+
+
+
+
+
+// =============================
+// SAVE EVERYTHING
+// =============================
+
+
+window.saveQuote=async()=>{
+
+
+if(!selectedQuote)
+return;
+
+
+
+let update={
+
+
+status:
 document.getElementById(
 "statusEditor"
-).value =
-selectedQuote.status;
+).value,
 
+
+price:
+document.getElementById(
+"priceEditor"
+).value,
+
+
+notes:
+document.getElementById(
+"notesEditor"
+).value,
+
+
+updated_at:
+new Date()
 
 
 };
@@ -510,42 +661,13 @@ selectedQuote.status;
 
 
 
+const {error}=
 
-
-
-// =====================================================
-// SAVE STATUS
-// =====================================================
-
-
-window.saveStatus =
-async function(){
-
-
-
-let status =
-document.getElementById(
-"statusEditor"
-).value;
-
-
-
-
-
-const {
-error
-}
-
-=
 await supabaseClient
 
 .from("quote_requests")
 
-.update({
-
-status:status
-
-})
+.update(update)
 
 .eq(
 "id",
@@ -556,16 +678,71 @@ selectedQuote.id
 
 
 
-
 if(error){
 
 console.error(error);
+
+alert(
+"Could not save changes."
+);
 
 return;
 
 }
 
 
+
+alert(
+"Saved!"
+);
+
+
+
+await loadQuotes();
+
+
+openQuote(selectedQuote.id);
+
+
+
+}
+
+
+
+
+
+
+
+
+
+// =============================
+// ARCHIVE
+// =============================
+
+
+window.archiveQuote=async()=>{
+
+
+if(!selectedQuote)
+return;
+
+
+await supabaseClient
+
+.from("quote_requests")
+
+.update({
+
+status:"Archived",
+
+updated_at:new Date()
+
+})
+
+.eq(
+"id",
+selectedQuote.id
+);
 
 
 
@@ -573,6 +750,16 @@ await loadQuotes();
 
 
 
+document.getElementById(
+"detailsPanel"
+).innerHTML=
+
+`
+<p>Select a request.</p>
+`;
+
+
+
 };
 
 
@@ -583,65 +770,44 @@ await loadQuotes();
 
 
 
-// =====================================================
+// =============================
 // COUNTERS
-// =====================================================
+// =============================
 
 
 function updateCounters(){
 
 
 
-const counters = {
+let ids={
 
+New:"newCount",
 
-"New":
-"newCount",
+Reviewing:"reviewCount",
 
+Quoted:"quoteCount",
 
-"Reviewing":
-"reviewCount",
+Printing:"printingCount",
 
+Completed:"completeCount",
 
-"Quoted":
-"quoteCount",
-
-
-"Printing":
-"printingCount",
-
-
-"Completed":
-"completeCount",
-
-
-"Archived":
-"archiveCount"
-
-
+Archived:"archiveCount"
 
 };
 
 
 
 
+Object.entries(ids)
+
+.forEach(([status,id])=>{
 
 
-Object.entries(counters)
-
-.forEach(
-([status,id])=>{
-
-
-
-document.getElementById(id)
-.textContent =
-
+document.getElementById(id).textContent=
 
 allQuotes.filter(
 q=>q.status===status
-)
-.length;
+).length;
 
 
 
@@ -659,39 +825,35 @@ q=>q.status===status
 
 
 
-// =====================================================
+// =============================
 // SEARCH
-// =====================================================
+// =============================
 
 
 function setupSearch(){
 
 
 
-const search =
+let input=
+
 document.getElementById(
 "searchQuotes"
 );
 
 
 
-if(!search)
+if(!input)
 return;
 
 
 
 
-
-search.addEventListener(
+input.addEventListener(
 "input",
 ()=>{
 
 
-
-let text =
-search.value.toLowerCase();
-
-
+let text=input.value.toLowerCase();
 
 
 
@@ -699,22 +861,23 @@ displayQuotes(
 
 allQuotes.filter(q=>
 
-
-q.name.toLowerCase()
+(q.name||"")
+.toLowerCase()
 .includes(text)
 
 
 ||
 
-q.email.toLowerCase()
+(q.email||"")
+.toLowerCase()
 .includes(text)
 
 
 ||
 
-q.project_name.toLowerCase()
+(q.project_name||"")
+.toLowerCase()
 .includes(text)
-
 
 
 )
@@ -727,7 +890,6 @@ q.project_name.toLowerCase()
 });
 
 
-
 }
 
 
@@ -738,16 +900,16 @@ q.project_name.toLowerCase()
 
 
 
-// =====================================================
-// DROPDOWN FILTER
-// =====================================================
+// =============================
+// FILTER
+// =============================
 
 
 function setupFilter(){
 
 
+let filter=
 
-const filter =
 document.getElementById(
 "statusFilter"
 );
@@ -759,50 +921,29 @@ return;
 
 
 
-
-filter.addEventListener(
-"change",
-()=>{
-
+filter.onchange=()=>{
 
 
 if(filter.value==="all"){
 
-
-activeStatusFilter=null;
-
-
-displayQuotes(
-allQuotes
-);
-
+displayQuotes(allQuotes);
 
 return;
 
-
 }
-
-
-
-
-activeStatusFilter =
-filter.value;
 
 
 
 displayQuotes(
 
 allQuotes.filter(
-q=>
-q.status===filter.value
+q=>q.status===filter.value
 )
 
 );
 
 
-
-});
-
+};
 
 
 }
@@ -815,120 +956,9 @@ q.status===filter.value
 
 
 
-// =====================================================
-// CLICKABLE STATUS CARDS
-// =====================================================
-
-
-function setupStatusCards(){
-
-
-
-document
-
-.querySelectorAll(
-".filter-card"
-)
-
-.forEach(card=>{
-
-
-card.addEventListener(
-"click",
-()=>{
-
-
-
-let status =
-card.dataset.status;
-
-
-
-
-
-document
-
-.querySelectorAll(
-".filter-card"
-)
-
-.forEach(c=>{
-
-c.classList.remove(
-"active"
-);
-
-});
-
-
-
-
-
-
-if(activeStatusFilter===status){
-
-
-activeStatusFilter=null;
-
-
-displayQuotes(
-allQuotes
-);
-
-
-return;
-
-
-}
-
-
-
-
-
-activeStatusFilter=status;
-
-
-
-card.classList.add(
-"active"
-);
-
-
-
-
-
-displayQuotes(
-
-allQuotes.filter(
-q=>
-q.status===status
-)
-
-);
-
-
-
-});
-
-
-
-});
-
-
-
-}
-
-
-
-
-
-
-
-
-
-// =====================================================
+// =============================
 // ANALYTICS
-// =====================================================
+// =============================
 
 
 async function loadAnalytics(){
@@ -936,116 +966,51 @@ async function loadAnalytics(){
 
 
 const {
-data,
-error
-}
 
-=
+data,
+
+error
+
+}=
+
 await supabaseClient
 
 .from("site_visits")
 
-.select(
-"id,created_at,date,page,visitor_id"
-)
-
-.order(
-"created_at",
-{
-ascending:true
-}
-);
+.select("*");
 
 
 
 
-
-
-if(error){
-
-console.error(
-"ANALYTICS ERROR:",
-error
-);
-
+if(error)
 return;
-
-}
-
-
-
-
-
-const visits =
-data || [];
-
-
-
 
 
 
 document.getElementById(
 "totalVisitors"
-).textContent =
-visits.length;
+).textContent=data.length;
 
 
 
 
+let today=
 
-
-
-const today =
 new Date()
+
 .toISOString()
-.substring(0,10);
 
-
+.split("T")[0];
 
 
 
 document.getElementById(
 "todayVisitors"
-).textContent =
+).textContent=
 
-
-visits.filter(
+data.filter(
 v=>v.date===today
-)
-.length;
-
-
-
-
-
-
-
-let week =
-new Date();
-
-
-week.setDate(
-week.getDate()-7
-);
-
-
-
-
-
-document.getElementById(
-"weekVisitors"
-).textContent =
-
-
-visits.filter(
-v=>
-
-new Date(v.created_at)>=week
-
-)
-
-.length;
-
+).length;
 
 
 
@@ -1056,21 +1021,16 @@ let pages={};
 
 
 
-visits.forEach(v=>{
+data.forEach(v=>{
 
 
-let page =
-v.page || "/";
+let p=v.page||"/";
 
 
-pages[page]=
-(pages[page]||0)+1;
-
+pages[p]=(pages[p]||0)+1;
 
 
 });
-
-
 
 
 
@@ -1083,194 +1043,27 @@ let highest=0;
 
 
 Object.entries(pages)
-.forEach(([page,count])=>{
+
+.forEach(([p,c])=>{
 
 
-if(count>highest){
+if(c>highest){
 
-highest=count;
+highest=c;
 
-top=page;
+top=p;
 
 }
 
 
 });
-
-
 
 
 
 document.getElementById(
 "topPage"
-).textContent =
-top;
+).textContent=top;
 
-
-
-
-
-
-
-
-const table =
-document.getElementById(
-"pageStats"
-);
-
-
-
-table.innerHTML="";
-
-
-
-Object.entries(pages)
-
-.sort(
-(a,b)=>b[1]-a[1]
-)
-
-.forEach(
-([page,count])=>{
-
-
-table.innerHTML += `
-
-
-<tr>
-
-<td>
-${page}
-</td>
-
-
-<td>
-${count}
-</td>
-
-
-</tr>
-
-
-`;
-
-
-});
-
-
-
-
-
-
-
-let labels=[];
-
-let values=[];
-
-
-
-for(let i=6;i>=0;i--){
-
-
-
-let d =
-new Date();
-
-
-
-d.setDate(
-d.getDate()-i
-);
-
-
-
-let day =
-d.toISOString()
-.substring(0,10);
-
-
-
-
-labels.push(
-day.substring(5)
-);
-
-
-
-values.push(
-
-visits.filter(
-v=>v.date===day
-)
-.length
-
-);
-
-
-
-}
-
-
-
-
-
-if(visitorChart){
-
-visitorChart.destroy();
-
-}
-
-
-
-
-visitorChart =
-
-new Chart(
-
-document.getElementById(
-"visitorChart"
-),
-
-{
-
-
-type:"line",
-
-
-data:{
-
-
-labels:labels,
-
-
-datasets:[{
-
-label:"Visitors",
-
-data:values
-
-
-}]
-
-
-},
-
-
-
-options:{
-
-
-responsive:true
-
-
-}
-
-
-}
-
-
-
-);
 
 
 

@@ -29,216 +29,361 @@ try {
 
 
 
-    // ===============================
-    // GET FORM VALUES
-    // ===============================
+const name =
+document.getElementById("projectCustomerName")
+.value
+.trim();
 
 
-    const name =
-        document.getElementById("projectCustomerName")
-        .value
-        .trim();
+const email =
+document.getElementById("projectCustomerEmail")
+.value
+.trim();
 
 
-    const email =
-        document.getElementById("projectCustomerEmail")
-        .value
-        .trim();
+const projectName =
+document.getElementById("projectName")
+.value
+.trim();
 
 
-    const projectName =
-        document.getElementById("projectName")
-        .value
-        .trim();
+const projectType =
+document.getElementById("projectType")
+.value;
 
 
-    const projectType =
-        document.getElementById("projectType")
-        .value;
+const details =
+document.getElementById("projectDetails")
+.value
+.trim();
 
 
-    const details =
-        document.getElementById("projectDetails")
-        .value
-        .trim();
 
+const fileInput =
+document.getElementById("projectFiles");
 
-    const fileInput =
-        document.getElementById("projectFiles");
 
 
-    const files =
-        fileInput ? Array.from(fileInput.files) : [];
+const files =
+fileInput
+?
+Array.from(fileInput.files)
+:
+[];
 
 
 
-    console.log("Files:", files);
 
 
+// =================================
+// FILE SECURITY
+// =================================
 
-    // ===============================
-    // UPLOAD FILES
-    // ===============================
 
+const allowedExtensions = [
 
-    let fileLinks = [];
+"stl",
+"obj",
+"3mf",
+"step",
+"stp",
+"iges",
+"igs",
+"fbx",
+"dae",
+"blend",
+"dwg",
+"dxf",
+"jpg",
+"jpeg",
+"png",
+"webp",
+"gif",
+"pdf"
 
+];
 
 
-    for (let i = 0; i < files.length; i++) {
 
+const maxFileSize =
+50 * 1024 * 1024;
 
-        const file = files[i];
 
 
-        button.innerHTML =
-        `Uploading file ${i + 1}/${files.length}...`;
+const maxTotalSize =
+100 * 1024 * 1024;
 
 
 
-        const cleanName =
-            file.name.replace(
-                /[^a-zA-Z0-9.-]/g,
-                "_"
-            );
+let totalSize = 0;
 
 
 
-        const filePath =
-            crypto.randomUUID()
-            + "-"
-            + cleanName;
+for(const file of files){
 
 
+const extension =
 
-        console.log(
-            "Uploading:",
-            filePath
-        );
+file.name
+.split(".")
+.pop()
+.toLowerCase();
 
 
 
-        const upload =
-            await supabaseClient
-            .storage
-            .from("quote-files")
-            .upload(
-                filePath,
-                file,
-                {
-                    cacheControl:"3600",
-                    upsert:false
-                }
-            );
+if(!allowedExtensions.includes(extension)){
 
 
+throw new Error(
 
-        console.log(
-            "Upload result:",
-            upload
-        );
+`File type not allowed:\n${file.name}`
 
+);
 
 
-        if (upload.error) {
+}
 
-            throw upload.error;
 
-        }
 
+if(file.size > maxFileSize){
 
 
-        const publicURL =
-            supabaseClient
-            .storage
-            .from("quote-files")
-            .getPublicUrl(filePath)
-            .data
-            .publicUrl;
+throw new Error(
 
+`${file.name} is larger than 50MB`
 
+);
 
-        console.log(
-            "File URL:",
-            publicURL
-        );
 
+}
 
 
-        fileLinks.push(publicURL);
 
+totalSize += file.size;
 
 
-    }
 
+}
 
 
 
 
-    // ===============================
-    // SAVE QUOTE REQUEST
-    // ===============================
+if(totalSize > maxTotalSize){
 
 
-    button.innerHTML =
-    "Sending request...";
+throw new Error(
 
+"Total upload size cannot exceed 100MB"
 
+);
 
-    const databaseResult =
-        await supabaseClient
-        .from("quote_requests")
-        .insert([
 
-            {
+}
 
-            name:name,
 
-            email:email,
 
-            project_name:projectName,
 
-            project_type:projectType,
 
-            details:details,
 
-            file_link:
-                fileLinks.join("\n"),
+// =================================
+// UPLOAD FILES
+// =================================
 
-            status:"New"
 
-            }
+let fileLinks = [];
 
-        ]);
 
 
+for(let i=0;i<files.length;i++){
 
-    console.log(
-        "Database result:",
-        databaseResult
-    );
 
 
+const file = files[i];
 
-    if(databaseResult.error){
 
 
-        throw databaseResult.error;
+button.innerHTML =
 
-    }
+`Uploading ${i+1}/${files.length}...`;
 
 
 
 
 
-    alert(
-        "Your project request was sent!"
-    );
+const cleanName =
 
+file.name.replace(
+/[^a-zA-Z0-9.-]/g,
+"_"
+);
 
 
-    window.location.href =
-        "../thank-you.html";
+
+
+
+const filePath =
+
+crypto.randomUUID()
+
++
+
+"-"
+
++
+
+cleanName;
+
+
+
+
+
+
+
+const upload =
+
+await supabaseClient
+
+.storage
+
+.from("quote-files")
+
+.upload(
+
+filePath,
+
+file,
+
+{
+
+cacheControl:"3600",
+
+upsert:false
+
+}
+
+);
+
+
+
+
+
+if(upload.error){
+
+
+throw upload.error;
+
+
+}
+
+
+
+
+
+
+
+const url =
+
+supabaseClient
+
+.storage
+
+.from("quote-files")
+
+.getPublicUrl(filePath)
+
+.data
+
+.publicUrl;
+
+
+
+
+
+fileLinks.push(url);
+
+
+
+}
+
+
+
+
+
+
+
+
+// =================================
+// SAVE REQUEST
+// =================================
+
+
+
+button.innerHTML =
+"Sending request...";
+
+
+
+
+
+const result =
+
+await supabaseClient
+
+.from("quote_requests")
+
+.insert([{
+
+
+name:name,
+
+
+email:email,
+
+
+project_name:projectName,
+
+
+project_type:projectType,
+
+
+details:details,
+
+
+file_link:fileLinks.join("\n"),
+
+
+status:"New"
+
+
+}]);
+
+
+
+
+
+
+if(result.error){
+
+
+throw result.error;
+
+
+}
+
+
+
+
+
+
+alert(
+"Your project request was sent!"
+);
+
+
+
+window.location.href =
+"../thank-you.html";
+
 
 
 
@@ -248,27 +393,35 @@ try {
 catch(error){
 
 
-    console.error(
-        "FINAL ERROR:",
-        error
-    );
 
-
-    alert(
-        "ERROR:\n\n"
-        +
-        error.message
-    );
+console.error(
+error
+);
 
 
 
-    button.disabled=false;
+alert(
 
-    button.innerHTML =
-    "Request Quote";
+"Unable to submit request:\n\n"
+
++
+
+error.message
+
+);
+
+
+
+button.disabled=false;
+
+
+button.innerHTML =
+"Request Quote";
+
 
 
 }
+
 
 
 });
