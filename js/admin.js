@@ -3,31 +3,166 @@ console.log("ADMIN DASHBOARD LOADED");
 
 let allQuotes = [];
 
-let visitorChart = null;
-
 let selectedQuote = null;
 
+let visitorChart = null;
+
+let activeStatusFilter = null;
+
+
+
+// =====================================================
+// START
+// =====================================================
+
+
+document.addEventListener(
+"DOMContentLoaded",
+async function(){
+
+
+if(!await checkLogin()){
+return;
+}
+
+
+
+setupButtons();
+
+setupSearch();
+
+setupFilter();
+
+setupStatusCards();
+
+
+
+await loadQuotes();
+
+await loadAnalytics();
+
+
+
+});
+
+
+
+
+
 
 
 
 
 // =====================================================
-// CHECK LOGIN
+// AUTH
 // =====================================================
 
 
-async function checkAdmin(){
+async function checkLogin(){
 
 
-const {data}=
+const {
+data,
+error
+}
 
+=
 await supabaseClient.auth.getSession();
+
+
+
+
+if(error){
+
+console.error(error);
+
+return false;
+
+}
 
 
 
 if(!data.session){
 
-window.location.href="login.html";
+window.location.href =
+"login.html";
+
+return false;
+
+}
+
+
+
+return true;
+
+
+}
+
+
+
+
+
+
+
+
+
+// =====================================================
+// BUTTONS
+// =====================================================
+
+
+function setupButtons(){
+
+
+const logout =
+document.getElementById(
+"logoutButton"
+);
+
+
+
+if(logout){
+
+
+logout.onclick = async()=>{
+
+
+await supabaseClient.auth.signOut();
+
+
+window.location.href =
+"login.html";
+
+
+};
+
+
+}
+
+
+
+
+
+const refresh =
+document.getElementById(
+"refreshButton"
+);
+
+
+
+if(refresh){
+
+
+refresh.onclick = async()=>{
+
+
+await loadQuotes();
+
+await loadAnalytics();
+
+
+};
+
 
 }
 
@@ -36,7 +171,6 @@ window.location.href="login.html";
 }
 
 
-checkAdmin();
 
 
 
@@ -52,8 +186,13 @@ checkAdmin();
 async function loadQuotes(){
 
 
-const {data,error}=
 
+const {
+data,
+error
+}
+
+=
 await supabaseClient
 
 .from("quote_requests")
@@ -69,10 +208,12 @@ ascending:false
 
 
 
+
+
 if(error){
 
 console.error(
-"Quote loading error:",
+"QUOTE LOAD ERROR:",
 error
 );
 
@@ -82,14 +223,20 @@ return;
 
 
 
-allQuotes=data;
+
+
+allQuotes =
+data || [];
 
 
 
 updateCounters();
 
 
-displayQuotes(allQuotes);
+
+displayQuotes(
+allQuotes
+);
 
 
 
@@ -102,21 +249,25 @@ displayQuotes(allQuotes);
 
 
 
+
 // =====================================================
-// DISPLAY REQUEST LIST
+// DISPLAY QUOTES
 // =====================================================
 
 
 function displayQuotes(quotes){
 
 
-const container =
 
-document.getElementById("quotes");
+const box =
+document.getElementById(
+"quotes"
+);
 
 
 
-container.innerHTML="";
+box.innerHTML="";
+
 
 
 
@@ -124,13 +275,9 @@ container.innerHTML="";
 if(quotes.length===0){
 
 
-container.innerHTML=
+box.innerHTML =
+"<p>No requests found.</p>";
 
-`
-<p>
-No requests found.
-</p>
-`;
 
 return;
 
@@ -140,29 +287,31 @@ return;
 
 
 
-quotes.forEach(quote=>{
 
 
-container.innerHTML +=
+quotes.forEach(q=>{
 
 
-`
+
+box.innerHTML += `
+
 
 <div class="quote-card"
 
-onclick="openQuote('${quote.id}')">
+onclick="openQuote('${q.id}')">
 
 
 <h3>
 
-${quote.project_name}
+${q.project_name}
 
 </h3>
 
 
+
 <p>
 
-${quote.name}
+${q.name}
 
 </p>
 
@@ -170,15 +319,15 @@ ${quote.name}
 
 <p>
 
-${quote.project_type}
+${q.project_type}
 
 </p>
 
 
 
-<span class="status-badge">
+<span>
 
-${quote.status}
+${q.status}
 
 </span>
 
@@ -204,37 +353,43 @@ ${quote.status}
 
 
 
+
 // =====================================================
-// OPEN REQUEST DETAILS
+// OPEN QUOTE
 // =====================================================
 
 
-window.openQuote=function(id){
+window.openQuote =
+function(id){
 
 
 
 selectedQuote =
-
 allQuotes.find(
 q=>q.id==id
 );
 
 
 
-const panel=
 
+if(!selectedQuote)
+return;
+
+
+
+
+
+const panel =
 document.getElementById(
 "detailsPanel"
 );
 
 
 
-panel.innerHTML=
 
 
-`
+panel.innerHTML = `
 
-<div class="details-card">
 
 
 <h2>
@@ -245,11 +400,9 @@ ${selectedQuote.project_name}
 
 
 
-
 <p>
 
-<b>Customer:</b>
-
+<b>Name:</b>
 ${selectedQuote.name}
 
 </p>
@@ -259,32 +412,20 @@ ${selectedQuote.name}
 <p>
 
 <b>Email:</b>
-
-<a href="mailto:${selectedQuote.email}">
-
 ${selectedQuote.email}
 
-</a>
-
 </p>
-
 
 
 
 <p>
 
-<b>Project Type:</b>
-
+<b>Type:</b>
 ${selectedQuote.project_type}
 
 </p>
 
 
-
-
-<h3>
-Description
-</h3>
 
 
 <p>
@@ -296,95 +437,53 @@ ${selectedQuote.details}
 
 
 
-
-<h3>
-Files
-</h3>
+<select id="statusEditor">
 
 
-<div>
-
-${
-selectedQuote.file_link
-
-?
-
-selectedQuote.file_link
-
-.split("\n")
-
-.map(file=>
+<option>
+New
+</option>
 
 
-`
-
-<a
-
-class="file-button"
-
-href="${file}"
-
-target="_blank">
-
-📎 Open File
-
-</a>
+<option>
+Reviewing
+</option>
 
 
-<br>
+<option>
+Quoted
+</option>
 
 
-`
-
-)
-
-.join("")
-
-:
-
-"No files uploaded"
-
-}
+<option>
+Approved
+</option>
 
 
-</div>
+<option>
+Printing
+</option>
 
 
+<option>
+Completed
+</option>
 
 
-
-
-
-<h3>
-Project Status
-</h3>
-
-
-
-<select
-
-id="statusEditor"
-
-class="status-select">
-
-
-${createStatusOptions(selectedQuote.status)}
+<option>
+Archived
+</option>
 
 
 </select>
 
 
 
+<br><br>
 
 
-<div class="admin-actions">
 
-
-<button
-
-class="primary"
-
-onclick="saveStatus()">
+<button onclick="saveStatus()">
 
 Save Status
 
@@ -392,84 +491,19 @@ Save Status
 
 
 
-<button
-
-class="archive-button"
-
-onclick="archiveQuote()">
-
-Archive
-
-</button>
-
-
-
-</div>
-
-
-
-</div>
-
-
-
 `;
 
 
 
-}
+
+document.getElementById(
+"statusEditor"
+).value =
+selectedQuote.status;
 
 
 
-
-
-
-
-
-function createStatusOptions(current){
-
-
-let statuses=[
-
-"New",
-
-"Reviewing",
-
-"Quoted",
-
-"Approved",
-
-"Printing",
-
-"Completed",
-
-"Archived"
-
-];
-
-
-return statuses.map(status=>
-
-
-`
-
-<option
-
-value="${status}"
-
-${status===current?"selected":""}>
-
-${status}
-
-</option>
-
-
-`
-
-).join("");
-
-
-
-}
+};
 
 
 
@@ -484,20 +518,12 @@ ${status}
 // =====================================================
 
 
-window.saveStatus=async function(){
+window.saveStatus =
+async function(){
 
 
 
-if(!selectedQuote){
-
-return;
-
-}
-
-
-
-const status=
-
+let status =
 document.getElementById(
 "statusEditor"
 ).value;
@@ -506,27 +532,26 @@ document.getElementById(
 
 
 
-const {error}=
+const {
+error
+}
 
+=
 await supabaseClient
 
 .from("quote_requests")
 
 .update({
 
-status:status,
-
-updated_at:new Date()
+status:status
 
 })
 
 .eq(
-
 "id",
-
 selectedQuote.id
-
 );
+
 
 
 
@@ -534,26 +559,13 @@ selectedQuote.id
 
 if(error){
 
-
 console.error(error);
 
-
-alert(
-"Could not save status."
-);
-
-
 return;
-
 
 }
 
 
-
-
-alert(
-"Status updated!"
-);
 
 
 
@@ -561,128 +573,8 @@ await loadQuotes();
 
 
 
-openQuote(selectedQuote.id);
+};
 
-
-
-}
-
-
-
-
-
-
-
-
-
-// =====================================================
-// ARCHIVE REQUEST
-// =====================================================
-
-
-window.archiveQuote=async function(){
-
-
-
-if(!selectedQuote){
-
-return;
-
-}
-
-
-
-let confirmArchive=
-
-confirm(
-
-"Archive this project?"
-
-);
-
-
-
-if(!confirmArchive){
-
-return;
-
-}
-
-
-
-
-
-const {error}=
-
-await supabaseClient
-
-.from("quote_requests")
-
-.update({
-
-status:"Archived",
-
-updated_at:new Date()
-
-})
-
-.eq(
-
-"id",
-
-selectedQuote.id
-
-);
-
-
-
-
-
-if(error){
-
-console.error(error);
-
-alert(
-"Could not archive."
-);
-
-return;
-
-}
-
-
-
-
-
-alert(
-"Project archived."
-);
-
-
-
-document
-
-.getElementById(
-"detailsPanel"
-)
-
-.innerHTML=
-
-`
-
-<p>
-Select a request to view details.
-</p>
-
-`;
-
-
-
-loadQuotes();
-
-
-
-}
 
 
 
@@ -700,54 +592,61 @@ function updateCounters(){
 
 
 
-document.getElementById("newCount").textContent=
-
-countStatus("New");
+const counters = {
 
 
-
-document.getElementById("reviewCount").textContent=
-
-countStatus("Reviewing");
+"New":
+"newCount",
 
 
-
-document.getElementById("quoteCount").textContent=
-
-countStatus("Quoted");
+"Reviewing":
+"reviewCount",
 
 
-
-document.getElementById("printingCount").textContent=
-
-countStatus("Printing");
+"Quoted":
+"quoteCount",
 
 
+"Printing":
+"printingCount",
 
-document.getElementById("completeCount").textContent=
 
-countStatus("Completed");
+"Completed":
+"completeCount",
+
+
+"Archived":
+"archiveCount"
 
 
 
-document.getElementById("archiveCount").textContent=
-
-countStatus("Archived");
+};
 
 
 
-}
 
 
 
-function countStatus(status){
+Object.entries(counters)
+
+.forEach(
+([status,id])=>{
 
 
-return allQuotes.filter(
 
-quote=>quote.status===status
+document.getElementById(id)
+.textContent =
 
-).length;
+
+allQuotes.filter(
+q=>q.status===status
+)
+.length;
+
+
+
+});
+
 
 
 }
@@ -765,104 +664,117 @@ quote=>quote.status===status
 // =====================================================
 
 
-document
+function setupSearch(){
 
-.getElementById("searchQuotes")
 
-.addEventListener(
 
+const search =
+document.getElementById(
+"searchQuotes"
+);
+
+
+
+if(!search)
+return;
+
+
+
+
+
+search.addEventListener(
 "input",
-
-function(){
-
+()=>{
 
 
-let search=
 
-this.value.toLowerCase();
+let text =
+search.value.toLowerCase();
 
 
 
 
-let filtered=
 
-allQuotes.filter(quote=>
+displayQuotes(
+
+allQuotes.filter(q=>
 
 
-
-quote.project_name
-
-.toLowerCase()
-
-.includes(search)
-
+q.name.toLowerCase()
+.includes(text)
 
 
 ||
 
-quote.name
-
-.toLowerCase()
-
-.includes(search)
-
+q.email.toLowerCase()
+.includes(text)
 
 
 ||
 
-quote.email
+q.project_name.toLowerCase()
+.includes(text)
 
-.toLowerCase()
 
-.includes(search)
 
+)
 
 
 );
 
 
 
-displayQuotes(filtered);
+});
 
 
 
 }
 
+
+
+
+
+
+
+
+
+// =====================================================
+// DROPDOWN FILTER
+// =====================================================
+
+
+function setupFilter(){
+
+
+
+const filter =
+document.getElementById(
+"statusFilter"
 );
 
 
 
+if(!filter)
+return;
 
 
 
 
-
-
-// =====================================================
-// FILTER
-// =====================================================
-
-
-document
-
-.getElementById("statusFilter")
-
-.addEventListener(
-
+filter.addEventListener(
 "change",
-
-function(){
-
-
-
-let filter=this.value;
+()=>{
 
 
 
-if(filter==="all"){
+if(filter.value==="all"){
 
 
-displayQuotes(allQuotes);
+activeStatusFilter=null;
+
+
+displayQuotes(
+allQuotes
+);
 
 
 return;
@@ -873,24 +785,28 @@ return;
 
 
 
+activeStatusFilter =
+filter.value;
+
+
+
 displayQuotes(
 
 allQuotes.filter(
-
-quote=>
-
-quote.status===filter
-
+q=>
+q.status===filter.value
 )
 
 );
 
 
 
+});
+
+
+
 }
 
-);
-
 
 
 
@@ -900,30 +816,107 @@ quote.status===filter
 
 
 // =====================================================
-// LOGOUT
+// CLICKABLE STATUS CARDS
 // =====================================================
+
+
+function setupStatusCards(){
+
 
 
 document
 
-.getElementById("logoutButton")
+.querySelectorAll(
+".filter-card"
+)
 
-.addEventListener(
+.forEach(card=>{
 
+
+card.addEventListener(
 "click",
-
-async()=>{
-
-
-await supabaseClient.auth.signOut();
+()=>{
 
 
-window.location.href="login.html";
+
+let status =
+card.dataset.status;
+
+
+
+
+
+document
+
+.querySelectorAll(
+".filter-card"
+)
+
+.forEach(c=>{
+
+c.classList.remove(
+"active"
+);
+
+});
+
+
+
+
+
+
+if(activeStatusFilter===status){
+
+
+activeStatusFilter=null;
+
+
+displayQuotes(
+allQuotes
+);
+
+
+return;
 
 
 }
 
+
+
+
+
+activeStatusFilter=status;
+
+
+
+card.classList.add(
+"active"
 );
+
+
+
+
+
+displayQuotes(
+
+allQuotes.filter(
+q=>
+q.status===status
+)
+
+);
+
+
+
+});
+
+
+
+});
+
+
+
+}
 
 
 
@@ -941,18 +934,37 @@ window.location.href="login.html";
 async function loadAnalytics(){
 
 
-const {data,error}=await supabaseClient
+
+const {
+data,
+error
+}
+
+=
+await supabaseClient
 
 .from("site_visits")
 
-.select("*");
+.select(
+"id,created_at,date,page,visitor_id"
+)
+
+.order(
+"created_at",
+{
+ascending:true
+}
+);
+
+
+
 
 
 
 if(error){
 
 console.error(
-"Analytics error:",
+"ANALYTICS ERROR:",
 error
 );
 
@@ -963,89 +975,97 @@ return;
 
 
 
-// TOTAL VISITORS
+
+const visits =
+data || [];
+
+
+
+
+
 
 document.getElementById(
 "totalVisitors"
-).textContent=data.length;
+).textContent =
+visits.length;
 
 
 
 
 
-// TODAY
 
-let today=new Date()
+
+const today =
+new Date()
 .toISOString()
-.split("T")[0];
+.substring(0,10);
+
+
 
 
 
 document.getElementById(
 "todayVisitors"
-).textContent=
+).textContent =
 
 
-data.filter(
+visits.filter(
 v=>v.date===today
-).length;
+)
+.length;
 
 
 
 
 
 
-// THIS WEEK
 
-let weekAgo=new Date();
+let week =
+new Date();
 
-weekAgo.setDate(
-weekAgo.getDate()-7
+
+week.setDate(
+week.getDate()-7
 );
 
 
-
-let weekVisitors=data.filter(v=>
-
-new Date(v.created_at)>=weekAgo
-
-);
 
 
 
 document.getElementById(
 "weekVisitors"
-).textContent=
-
-weekVisitors.length;
+).textContent =
 
 
+visits.filter(
+v=>
+
+new Date(v.created_at)>=week
+
+)
+
+.length;
 
 
 
 
 
-// PAGE STATISTICS
 
 
 let pages={};
 
 
 
-data.forEach(v=>{
+visits.forEach(v=>{
 
 
-let page=v.page || "/";
+let page =
+v.page || "/";
 
 
-if(!pages[page]){
+pages[page]=
+(pages[page]||0)+1;
 
-pages[page]=0;
-
-}
-
-
-pages[page]++;
 
 
 });
@@ -1056,48 +1076,48 @@ pages[page]++;
 
 
 
-// MOST VISITED PAGE
-
-
-let topPage="-";
+let top="-";
 
 let highest=0;
 
 
-Object.keys(pages).forEach(page=>{
+
+Object.entries(pages)
+.forEach(([page,count])=>{
 
 
-if(pages[page]>highest){
+if(count>highest){
 
-highest=pages[page];
+highest=count;
 
-topPage=page;
+top=page;
 
 }
 
 
 });
+
+
 
 
 
 document.getElementById(
 "topPage"
-).textContent=
-
-topPage;
-
+).textContent =
+top;
 
 
 
 
 
 
-// PAGE TABLE
 
 
-let table=document.getElementById(
+const table =
+document.getElementById(
 "pageStats"
 );
+
 
 
 table.innerHTML="";
@@ -1106,17 +1126,16 @@ table.innerHTML="";
 
 Object.entries(pages)
 
-.sort((a,b)=>b[1]-a[1])
+.sort(
+(a,b)=>b[1]-a[1]
+)
 
-.slice(0,10)
-
-.forEach(([page,count])=>{
-
-
-table.innerHTML+=
+.forEach(
+([page,count])=>{
 
 
-`
+table.innerHTML += `
+
 
 <tr>
 
@@ -1124,11 +1143,14 @@ table.innerHTML+=
 ${page}
 </td>
 
+
 <td>
 ${count}
 </td>
 
+
 </tr>
+
 
 `;
 
@@ -1141,21 +1163,20 @@ ${count}
 
 
 
+let labels=[];
 
-
-// 7 DAY GRAPH
-
-
-let days=[];
-
-let counts=[];
+let values=[];
 
 
 
 for(let i=6;i>=0;i--){
 
 
-let d=new Date();
+
+let d =
+new Date();
+
+
 
 d.setDate(
 d.getDate()-i
@@ -1163,31 +1184,31 @@ d.getDate()-i
 
 
 
-let date=d
-.toISOString()
-.split("T")[0];
+let day =
+d.toISOString()
+.substring(0,10);
 
 
 
-days.push(
-date.substring(5)
+
+labels.push(
+day.substring(5)
 );
 
 
 
-counts.push(
+values.push(
 
-data.filter(v=>
-
-v.date===date
-
-).length
+visits.filter(
+v=>v.date===day
+)
+.length
 
 );
+
 
 
 }
-
 
 
 
@@ -1202,7 +1223,9 @@ visitorChart.destroy();
 
 
 
-visitorChart=new Chart(
+visitorChart =
+
+new Chart(
 
 document.getElementById(
 "visitorChart"
@@ -1211,21 +1234,20 @@ document.getElementById(
 {
 
 
-type:"bar",
+type:"line",
 
 
 data:{
 
 
-labels:days,
+labels:labels,
 
 
 datasets:[{
 
-
 label:"Visitors",
 
-data:counts
+data:values
 
 
 }]
@@ -1238,16 +1260,7 @@ data:counts
 options:{
 
 
-responsive:true,
-
-
-plugins:{
-
-
-legend:{
-
-
-display:true
+responsive:true
 
 
 }
@@ -1255,12 +1268,6 @@ display:true
 
 }
 
-
-}
-
-
-
-}
 
 
 );
@@ -1268,14 +1275,3 @@ display:true
 
 
 }
-
-
-
-// =====================================================
-// START
-// =====================================================
-
-
-loadQuotes();
-
-loadAnalytics();

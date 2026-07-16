@@ -8,16 +8,19 @@
 
 <title>Admin Dashboard | PlasticBlocks3D</title>
 
-<link rel="icon" type="image/png" href="../images/logos/logo.png">
 
 <link rel="stylesheet" href="../css/style.css">
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+
+<link rel="icon" href="../images/logos/logo.png">
+
 
 </head>
 
 
+
 <body>
+
 
 
 <header class="nav">
@@ -25,11 +28,10 @@
 
 <div class="brand">
 
-<a href="../index.html" class="logo-link">
 
-<img src="../images/logos/logo.png">
-
-</a>
+<img 
+src="../images/logos/logo.png"
+alt="PlasticBlocks3D Logo">
 
 
 <div>
@@ -38,20 +40,45 @@
 PlasticBlocks3D
 </h2>
 
+
 <p>
 Admin Dashboard
 </p>
 
-</div>
-
 
 </div>
 
 
+</div>
 
-<button id="logoutButton" class="primary">
-Logout
+
+
+
+
+<div>
+
+
+<button 
+id="refreshButton"
+class="primary">
+
+Refresh
+
 </button>
+
+
+
+<button
+id="logoutButton"
+class="primary">
+
+Logout
+
+</button>
+
+
+</div>
+
 
 
 </header>
@@ -60,21 +87,22 @@ Logout
 
 
 
+
+
+
+
 <section class="page-header">
 
-<div class="container">
 
 <h1>
 Project Management
 </h1>
 
-<p class="intro-text">
 
-Manage customer requests, quotes, printing jobs, and website activity.
-
+<p>
+Manage customer requests and website activity.
 </p>
 
-</div>
 
 </section>
 
@@ -84,54 +112,36 @@ Manage customer requests, quotes, printing jobs, and website activity.
 
 
 
-<section class="admin-page">
 
 
-<div class="container">
-
-
+<main class="admin-page">
 
 
 
-<!-- SUMMARY -->
-
-<div class="dashboard-stats">
 
 
-<div class="stat-card">
-<h2 id="newCount">0</h2>
-<p>New</p>
-</div>
+<!-- =======================
+STATUS CARDS
+======================= -->
 
 
-<div class="stat-card">
-<h2 id="reviewCount">0</h2>
-<p>Reviewing</p>
-</div>
+<section class="dashboard-stats">
 
 
-<div class="stat-card">
-<h2 id="quoteCount">0</h2>
-<p>Quoted</p>
-</div>
+
+<div 
+class="stat-card filter-card"
+data-status="New">
 
 
-<div class="stat-card">
-<h2 id="printingCount">0</h2>
-<p>Printing</p>
-</div>
+<h2 id="newCount">
+0
+</h2>
 
 
-<div class="stat-card">
-<h2 id="completeCount">0</h2>
-<p>Completed</p>
-</div>
-
-
-<div class="stat-card">
-<h2 id="archiveCount">0</h2>
-<p>Archived</p>
-</div>
+<p>
+New
+</p>
 
 
 </div>
@@ -141,19 +151,144 @@ Manage customer requests, quotes, printing jobs, and website activity.
 
 
 
+<div 
+class="stat-card filter-card"
+data-status="Reviewing">
 
-<!-- SEARCH -->
 
-<div class="admin-toolbar">
+<h2 id="reviewCount">
+0
+</h2>
+
+
+<p>
+Reviewing
+</p>
+
+
+</div>
+
+
+
+
+
+
+<div 
+class="stat-card filter-card"
+data-status="Quoted">
+
+
+<h2 id="quoteCount">
+0
+</h2>
+
+
+<p>
+Quoted
+</p>
+
+
+</div>
+
+
+
+
+
+
+<div 
+class="stat-card filter-card"
+data-status="Printing">
+
+
+<h2 id="printingCount">
+0
+</h2>
+
+
+<p>
+Printing
+</p>
+
+
+</div>
+
+
+
+
+
+
+<div 
+class="stat-card filter-card"
+data-status="Completed">
+
+
+<h2 id="completeCount">
+0
+</h2>
+
+
+<p>
+Completed
+</p>
+
+
+</div>
+
+
+
+
+
+
+<div 
+class="stat-card filter-card"
+data-status="Archived">
+
+
+<h2 id="archiveCount">
+0
+</h2>
+
+
+<p>
+Archived
+</p>
+
+
+</div>
+
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<!-- =======================
+SEARCH
+======================= -->
+
+
+<section class="admin-toolbar">
+
 
 
 <input
 
 id="searchQuotes"
 
-placeholder="Search customers or projects..."
+type="text"
+
+placeholder="Search customer or project..."
 
 >
+
+
+
 
 
 <select id="statusFilter">
@@ -202,7 +337,8 @@ Archived
 </select>
 
 
-</div>
+
+</section>
 
 
 
@@ -211,13 +347,17 @@ Archived
 
 
 
-<div class="admin-layout">
+
+<!-- =======================
+REQUEST AREA
+======================= -->
+
+
+<section class="admin-layout">
 
 
 
 
-
-<!-- REQUEST LIST -->
 
 <div class="request-column">
 
@@ -227,12 +367,11 @@ Requests
 </h2>
 
 
-<div id="quotes">
 
+<div id="quotes">
 
 Loading...
 
-
 </div>
 
 
@@ -243,8 +382,6 @@ Loading...
 
 
 
-
-<!-- DETAILS -->
 
 <div class="details-column">
 
@@ -254,166 +391,25 @@ Project Details
 </h2>
 
 
-<div id="detailsPanel" class="details-panel">
+
+<div 
+id="detailsPanel"
+class="details-panel">
 
 
 <p>
-Select a request to view details.
+Select a request.
 </p>
 
 
 </div>
 
 
-</div>
-
-
-
 
 </div>
 
 
 
-
-
-
-
-
-<!-- ANALYTICS -->
-
-<div class="analytics-card">
-
-
-<h2>
-Website Analytics
-</h2>
-
-
-
-<div class="analytics-grid">
-
-
-<div class="analytics-stat">
-
-<h3 id="totalVisitors">
-0
-</h3>
-
-<p>
-Total Visitors
-</p>
-
-</div>
-
-
-
-<div class="analytics-stat">
-
-<h3 id="todayVisitors">
-0
-</h3>
-
-<p>
-Today
-</p>
-
-</div>
-
-
-
-<div class="analytics-stat">
-
-<h3 id="weekVisitors">
-0
-</h3>
-
-<p>
-This Week
-</p>
-
-</div>
-
-
-
-<div class="analytics-stat">
-
-<h3 id="topPage">
--
-</h3>
-
-<p>
-Most Visited Page
-</p>
-
-</div>
-
-
-
-</div>
-
-
-
-
-
-<div class="chart-container">
-
-<canvas id="visitorChart"></canvas>
-
-</div>
-
-
-
-
-
-<div class="analytics-table">
-
-
-<h3>
-Popular Pages
-</h3>
-
-
-<table>
-
-
-<thead>
-
-<tr>
-
-<th>
-Page
-</th>
-
-<th>
-Views
-</th>
-
-</tr>
-
-</thead>
-
-
-<tbody id="pageStats">
-
-<tr>
-
-<td colspan="2">
-Loading...
-</td>
-
-</tr>
-
-</tbody>
-
-
-</table>
-
-
-</div>
-
-
-
-</div>
 
 </section>
 
@@ -422,16 +418,220 @@ Loading...
 
 
 
+
+
+
+<!-- =======================
+ANALYTICS
+======================= -->
+
+
+<section class="analytics-card">
+
+
+<h2>
+Website Analytics
+</h2>
+
+
+
+
+
+
+<div class="analytics-grid">
+
+
+
+<div class="analytics-stat">
+
+
+<h3 id="totalVisitors">
+0
+</h3>
+
+
+<p>
+Total Visitors
+</p>
+
+
+</div>
+
+
+
+
+
+<div class="analytics-stat">
+
+
+<h3 id="todayVisitors">
+0
+</h3>
+
+
+<p>
+Today
+</p>
+
+
+</div>
+
+
+
+
+
+<div class="analytics-stat">
+
+
+<h3 id="weekVisitors">
+0
+</h3>
+
+
+<p>
+This Week
+</p>
+
+
+</div>
+
+
+
+
+
+<div class="analytics-stat">
+
+
+<h3 id="topPage">
+-
+</h3>
+
+
+<p>
+Most Visited Page
+</p>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+<div class="chart-container">
+
+
+<canvas id="visitorChart"></canvas>
+
+
+</div>
+
+
+
+
+
+
+
+
+<h3>
+Popular Pages
+</h3>
+
+
+
+<table>
+
+
+<thead>
+
+
+<tr>
+
+<th>
+Page
+</th>
+
+
+<th>
+Views
+</th>
+
+
+</tr>
+
+
+</thead>
+
+
+
+<tbody id="pageStats">
+
+
+<tr>
+
+<td colspan="2">
+
+Loading...
+
+</td>
+
+
+</tr>
+
+
+</tbody>
+
+
+
+</table>
+
+
+
+
+
+</section>
+
+
+
+
+
+
+
+
+
+</main>
+
+
+
+
+
+
+
+
+
+<!-- SCRIPTS -->
+
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
 <script src="../js/supabase.js"></script>
 
+
 <script src="../js/admin.js"></script>
 
 
+
 </body>
+
 
 </html>
