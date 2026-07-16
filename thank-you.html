@@ -8,7 +8,7 @@
 
 <title>Thank You | PlasticBlocks3D</title>
 
-<link rel="icon" type="image/png" href="../images/logos/logo.png">
+<link rel="icon" type="image/png" href="images/logos/logo.png">
 
 <link rel="stylesheet" href="css/style.css">
 
@@ -102,7 +102,73 @@ Your project request has been successfully submitted.
 
 
 <h2>
+Your Quote ID
+</h2>
+
+
+
+<p>
+
+Save this number so you can track your project progress.
+
+</p>
+
+
+
+<div class="quote-id-box">
+
+
+<span id="quoteID">
+
+Loading...
+
+</span>
+
+
+</div>
+
+
+
+
+
+<button 
+id="copyQuote"
+class="primary">
+
+Copy Quote ID
+
+</button>
+
+
+
+
+
+
+<br><br>
+
+
+
+
+
+<a 
+id="trackButton"
+href="track.html"
+class="primary">
+
+Track My Project
+
+</a>
+
+
+
+
+
+
+
+<h2 style="margin-top:40px;">
+
 What Happens Next?
+
 </h2>
 
 
@@ -121,7 +187,6 @@ pricing, or the next steps.
 Thank you for choosing PlasticBlocks3D!
 
 </p>
-
 
 
 
@@ -236,6 +301,84 @@ Contact
 
 
 </footer>
+
+
+
+
+
+
+
+<script>
+
+
+const params = new URLSearchParams(
+window.location.search
+);
+
+
+const quote = params.get("quote");
+
+
+
+const quoteDisplay =
+document.getElementById("quoteID");
+
+
+const trackButton =
+document.getElementById("trackButton");
+
+
+
+if(quote){
+
+
+quoteDisplay.textContent = quote;
+
+
+trackButton.href =
+"pages/track.html?quote=" + quote;
+
+
+}
+
+else{
+
+
+quoteDisplay.textContent =
+"No Quote ID Found";
+
+
+}
+
+
+
+
+
+document
+.getElementById("copyQuote")
+.onclick = async()=>{
+
+
+if(!quote)
+return;
+
+
+
+await navigator.clipboard.writeText(
+quote
+);
+
+
+alert(
+"Quote ID copied!"
+);
+
+
+};
+
+
+
+</script>
 
 
 

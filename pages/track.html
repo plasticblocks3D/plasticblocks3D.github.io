@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Contact | PlasticBlocks3D</title>
+<title>Track Project | PlasticBlocks3D</title>
 
 <link rel="icon" type="image/png" href="../images/logos/logo.png">
 
@@ -15,6 +15,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
 
 </head>
+
 
 
 <body>
@@ -31,6 +32,7 @@
 <img src="../images/logos/logo.png" alt="PlasticBlocks3D Logo">
 
 </a>
+
 
 
 <div>
@@ -65,7 +67,6 @@ Designed. Engineered. Printed.
 
 
 
-
 <nav class="mobile-menu">
 
 
@@ -94,9 +95,10 @@ About
 </a>
 
 
-<a class="active" href="contact.html">
+<a href="contact.html">
 Contact
 </a>
+
 
 
 <a href="login.html" class="admin-login-link">
@@ -105,6 +107,7 @@ Admin Login
 
 
 </nav>
+
 
 
 </header>
@@ -124,21 +127,18 @@ Admin Login
 
 
 <p class="section-label">
-GET IN TOUCH
+PROJECT TRACKING
 </p>
 
 
 <h1>
-Contact PlasticBlocks3D
+Track Your Project
 </h1>
 
 
 <p class="intro-text">
 
-Have a question about a project, material, design idea,
-or custom creation?
-<br>
-I would be happy to hear from you.
+Enter your Quote ID to view your current project status.
 
 </p>
 
@@ -162,35 +162,49 @@ I would be happy to hear from you.
 <div class="container">
 
 
-<div class="contact-grid">
-
-
-
-
-
 <div class="contact-card">
 
 
+
 <h2>
-Start a Project
+Enter Quote ID
 </h2>
+
 
 
 <p>
 
-The best way to begin a project is by sending a quote request.
-Include your idea, measurements, files, or anything that will
-help explain what you need.
+Your Quote ID can be found on your confirmation page.
 
 </p>
 
 
 
-<a href="quote.html" class="primary">
+<input
 
-Request Quote
+id="quoteSearch"
 
-</a>
+type="text"
+
+placeholder="Example: PB-2026-TSBJ"
+
+>
+
+
+
+<br><br>
+
+
+
+<button
+
+id="trackButton"
+
+class="primary">
+
+Check Status
+
+</button>
 
 
 
@@ -204,27 +218,91 @@ Request Quote
 
 
 
-<div class="contact-card">
+<div
+
+id="resultCard"
+
+class="contact-card project-result-card"
+
+style="display:none; margin-top:30px;">
+
+
+
+<div class="current-status-card">
+
+
+<h3>
+Current Status
+</h3>
+
+
+<div id="statusDisplay">
+
+Loading...
+
+</div>
+
+
+</div>
+
+
+
 
 
 <h2>
-Track Your Project
+Project Information
 </h2>
 
 
-<p>
 
-Already submitted a request?
-Use your Quote ID to view your project's current status and progress timeline.
-
-</p>
+<div class="project-info-grid">
 
 
-<a href="track.html" class="primary">
+<div>
 
-Track Project
+<strong>
+Project
+</strong>
 
-</a>
+<p id="projectName"></p>
+
+</div>
+
+
+
+<div>
+
+<strong>
+Project Type
+</strong>
+
+<p id="projectType"></p>
+
+</div>
+
+
+
+<div>
+
+<strong>
+Submitted
+</strong>
+
+<p id="createdDate"></p>
+
+</div>
+
+
+
+<div>
+
+<strong>
+Last Updated
+</strong>
+
+<p id="updatedDate"></p>
+
+</div>
 
 
 </div>
@@ -234,93 +312,22 @@ Track Project
 
 
 
+<h3>
+Project Timeline
+</h3>
 
 
 
-<div class="contact-card">
+<div id="projectTimeline">
 
-
-<h2>
-Email
-</h2>
-
-
-<p>
-
-For questions, ideas, or general information:
-
-</p>
-
-
-<p>
-
-<a href="mailto:plasticblocks3d@outlook.com">
-
-plasticblocks3d@outlook.com
-
-</a>
-
-</p>
-
-
+Loading timeline...
 
 </div>
 
 
 
-
-
-
-
-
-
-<div class="contact-card">
-
-
-<h2>
-What To Include
-</h2>
-
-
-<ul>
-
-
-<li>
-Project description
-</li>
-
-
-<li>
-Measurements or dimensions
-</li>
-
-
-<li>
-Pictures or drawings
-</li>
-
-
-<li>
-3D model files if available
-</li>
-
-
-<li>
-Material preferences
-</li>
-
-
-</ul>
-
-
 </div>
 
-
-
-
-
-
-</div>
 
 
 </div>
@@ -431,48 +438,7 @@ Contact
 
 
 
-
-
-<div>
-
-
-<h3>
-Coming Soon
-</h3>
-
-
-<ul class="footer-links">
-
-
-<li>
-Online Quotes
-</li>
-
-
-<li>
-Customer Gallery
-</li>
-
-
-<li>
-Project Updates
-</li>
-
-
-</ul>
-
-
 </div>
-
-
-
-
-
-
-
-</div>
-
-
 
 
 
@@ -497,6 +463,10 @@ Project Updates
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="../js/supabase.js"></script>
+
+<script src="../js/tracking.js"></script>
+
+<script src="../js/project-tracking.js"></script>
 
 <script src="../js/script.js"></script>
 

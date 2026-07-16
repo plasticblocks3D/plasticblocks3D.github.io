@@ -74,7 +74,6 @@ Array.from(fileInput.files)
 
 
 
-
 // =================================
 // FILE SECURITY
 // =================================
@@ -298,7 +297,6 @@ supabaseClient
 
 
 
-
 fileLinks.push(url);
 
 
@@ -313,8 +311,32 @@ fileLinks.push(url);
 
 
 // =================================
-// SAVE REQUEST
+// CREATE QUOTE ID
 // =================================
+
+
+const quoteID =
+
+"PB-" +
+
+new Date().getFullYear()
+
++
+
+"-"
+
++
+
+Math.random()
+
+.toString(36)
+
+.substring(2,6)
+
+.toUpperCase();
+
+
+
 
 
 
@@ -323,6 +345,13 @@ button.innerHTML =
 
 
 
+
+
+
+
+// =================================
+// SAVE REQUEST
+// =================================
 
 
 const result =
@@ -352,10 +381,16 @@ details:details,
 file_link:fileLinks.join("\n"),
 
 
-status:"New"
+status:"New",
 
 
-}]);
+quote_id:quoteID
+
+
+}])
+
+.select();
+
 
 
 
@@ -375,23 +410,73 @@ throw result.error;
 
 
 
-alert(
-"Your project request was sent!"
+
+// =================================
+// CREATE FIRST TIMELINE EVENT
+// =================================
+
+
+const history =
+
+await supabaseClient
+
+.from("quote_history")
+
+.insert([{
+
+quote_id:quoteID,
+
+old_status:"Submitted",
+
+new_status:"New"
+
+}]);
+
+
+
+
+
+
+if(history.error){
+
+
+console.error(
+"History creation failed:",
+history.error
 );
-
-
-
-window.location.href =
-"../thank-you.html";
-
-
-
 
 
 }
 
-catch(error){
 
+
+
+
+
+
+
+// =================================
+// GO TO THANK YOU PAGE
+// =================================
+
+
+window.location.href =
+
+"../thank-you.html?quote="
+
++
+
+quoteID;
+
+
+}
+
+
+
+
+
+
+catch(error){
 
 
 console.error(

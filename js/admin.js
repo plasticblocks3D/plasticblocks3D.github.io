@@ -345,6 +345,40 @@ ${selectedQuote.project_name}
 </h2>
 
 
+<div class="quote-id-box">
+
+
+<p>
+
+<b>Tracking Number:</b>
+
+</p>
+
+
+<span id="adminQuoteID">
+
+${selectedQuote.quote_id || "No ID"}
+
+</span>
+
+
+<br><br>
+
+
+<button
+
+class="primary"
+
+onclick="copyQuoteID()">
+
+Copy ID
+
+</button>
+
+
+</div>
+
+
 
 <p>
 
@@ -565,54 +599,46 @@ Archive
 
 function statusOptions(current){
 
+    let list=[
 
-let list=[
+    "New",
 
-"New",
+    "Reviewing",
 
-"Reviewing",
+    "Designing",
 
-"Quoted",
+    "Printing",
 
-"Approved",
+    "Quality Check",
 
-"Printing",
+    "Completed",
 
-"Completed",
+    "Archived"
 
-"Archived"
-
-];
-
+    ];
 
 
-return list.map(s=>
+    return list.map(s=>
 
 
-`
+    `
 
-<option
+    <option
 
-value="${s}"
+    value="${s}"
 
-${s===current?"selected":""}>
+    ${s===current?"selected":""}>
 
-${s}
+    ${s}
 
-</option>
-
-
-`
-
-).join("");
+    </option>
 
 
+    `
+
+    ).join("");
 
 }
-
-
-
-
 
 
 
@@ -631,13 +657,26 @@ return;
 
 
 
+const newStatus =
+
+document.getElementById(
+"statusEditor"
+).value;
+
+
+
+const oldStatus =
+
+selectedQuote.status;
+
+
+
+
+
 let update={
 
 
-status:
-document.getElementById(
-"statusEditor"
-).value,
+status:newStatus,
 
 
 price:
@@ -661,6 +700,11 @@ new Date()
 
 
 
+
+
+// =============================
+// SAVE QUOTE CHANGES
+// =============================
 
 
 const {error}=
@@ -694,6 +738,76 @@ return;
 
 
 
+
+
+
+
+
+// =============================
+// SAVE STATUS HISTORY
+// =============================
+
+
+if(oldStatus !== newStatus){
+
+
+
+const {
+
+error:historyError
+
+}=
+
+
+await supabaseClient
+
+.from("quote_history")
+
+.insert([{
+
+
+quote_id:
+
+selectedQuote.quote_id,
+
+
+old_status:
+
+oldStatus,
+
+
+new_status:
+
+newStatus
+
+
+}]);
+
+
+
+
+if(historyError){
+
+console.error(
+"History error:",
+historyError
+);
+
+
+}
+
+
+
+
+
+
+}
+
+
+
+
+
+
 alert(
 "Saved!"
 );
@@ -713,10 +827,6 @@ openQuote(selectedQuote.id);
 
 
 
-
-
-
-
 // =============================
 // ARCHIVE
 // =============================
@@ -728,6 +838,13 @@ window.archiveQuote=async()=>{
 if(!selectedQuote)
 return;
 
+
+
+const {
+
+error
+
+}=
 
 await supabaseClient
 
@@ -745,6 +862,51 @@ updated_at:new Date()
 "id",
 selectedQuote.id
 );
+
+
+
+
+
+if(error){
+
+console.error(error);
+
+return;
+
+}
+
+
+
+
+
+
+await supabaseClient
+
+.from("quote_history")
+
+.insert([{
+
+
+quote_id:
+
+selectedQuote.quote_id,
+
+
+old_status:
+
+selectedQuote.status,
+
+
+new_status:
+
+"Archived"
+
+
+}]);
+
+
+
+
 
 
 
@@ -769,9 +931,6 @@ document.getElementById(
 
 
 
-
-
-
 // =============================
 // COUNTERS
 // =============================
@@ -787,9 +946,11 @@ New:"newCount",
 
 Reviewing:"reviewCount",
 
-Quoted:"quoteCount",
+Designing:"designCount",
 
 Printing:"printingCount",
+
+"Quality Check":"qualityCount",
 
 Completed:"completeCount",
 
@@ -1402,6 +1563,45 @@ maintainAspectRatio:false
 
 }
 
+
+
+}
+
+// =============================
+// COPY QUOTE ID
+// =============================
+
+
+window.copyQuoteID = async function(){
+
+
+const id =
+
+document.getElementById(
+"adminQuoteID"
+).textContent;
+
+
+
+if(!id || id==="No ID"){
+
+alert(
+"No Quote ID available."
+);
+
+return;
+
+}
+
+
+
+await navigator.clipboard.writeText(id);
+
+
+
+alert(
+"Quote ID copied!"
+);
 
 
 }

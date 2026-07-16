@@ -4736,3 +4736,1316 @@ padding:10px;
     margin-top:20px;
 
 }
+
+/* =====================================================
+   PLASTICBLOCKS3D ADMIN WORKSHOP THEME
+   FINAL OVERRIDES
+===================================================== */
+
+
+/* ADMIN PAGE BACKGROUND */
+
+.admin-page {
+
+    padding:70px 6%;
+
+}
+
+
+
+
+
+/* HEADER BUTTON AREA */
+
+.nav > div:last-child {
+
+    display:flex;
+
+    gap:15px;
+
+    align-items:center;
+
+}
+
+
+
+
+
+.nav button {
+
+    min-width:120px;
+
+}
+
+
+
+
+
+/* STATUS CARDS */
+
+.filter-card {
+
+    cursor:pointer;
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+
+
+.filter-card::before {
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+
+    left:0;
+
+    width:100%;
+
+    height:4px;
+
+    background:#2f8cff;
+
+}
+
+
+
+.filter-card:hover {
+
+    border-color:#2f8cff;
+
+    box-shadow:
+
+    0 15px 40px rgba(47,140,255,.18);
+
+}
+
+
+
+.filter-card h2 {
+
+    font-size:3rem;
+
+}
+
+
+
+
+
+/* REQUEST + DETAILS PANELS */
+
+
+.request-column,
+.details-column {
+
+
+    background:
+
+    linear-gradient(
+
+    145deg,
+
+    #171c24,
+
+    #111827
+
+    );
+
+
+    border:
+
+    1px solid rgba(255,255,255,.08);
+
+
+    box-shadow:
+
+    0 20px 50px rgba(0,0,0,.25);
+
+
+}
+
+
+
+
+
+.request-column > h2,
+.details-column > h2 {
+
+
+    color:white;
+
+    margin-bottom:25px;
+
+    font-size:1.8rem;
+
+}
+
+
+
+
+
+/* QUOTE CARDS */
+
+
+.quote-card {
+
+
+    border-left:
+
+    4px solid #2f8cff;
+
+
+}
+
+
+
+.quote-card:hover {
+
+
+    border-left-color:#4b9eff;
+
+
+}
+
+
+
+
+
+.quote-card h3 {
+
+
+    font-size:1.3rem;
+
+
+}
+
+
+
+
+
+.status-badge {
+
+
+    margin-top:15px;
+
+
+    background:
+
+    rgba(47,140,255,.18);
+
+
+    color:#7db8ff;
+
+
+    border:
+
+    1px solid rgba(47,140,255,.3);
+
+
+}
+
+
+
+
+
+
+
+/* DETAILS PANEL */
+
+
+.details-card {
+
+
+    background:
+
+    linear-gradient(
+
+    145deg,
+
+    #202733,
+
+    #171c24
+
+    );
+
+
+}
+
+
+
+
+
+.details-card h2 {
+
+
+    color:#4b9eff;
+
+    font-size:2rem;
+
+
+}
+
+
+
+
+
+.details-card h3 {
+
+
+    color:white;
+
+    border-bottom:
+
+    1px solid rgba(255,255,255,.08);
+
+
+    padding-bottom:10px;
+
+
+}
+
+
+
+
+
+.details-card strong {
+
+
+    color:white;
+
+
+}
+
+
+
+
+
+.details-card input,
+.details-card textarea,
+.details-card select {
+
+
+    background:#0d1117;
+
+
+    color:white;
+
+
+    border:
+
+    1px solid rgba(255,255,255,.12);
+
+
+}
+
+
+
+
+
+.details-card input:focus,
+.details-card textarea:focus,
+.details-card select:focus {
+
+
+    outline:
+
+    2px solid #2f8cff;
+
+
+}
+
+
+
+
+
+
+
+/* ACTION BUTTON AREA */
+
+
+.details-card button {
+
+
+    margin-right:10px;
+
+
+}
+
+
+
+
+
+.archive-button {
+
+
+    background:#ef4444;
+
+
+}
+
+
+
+
+
+.archive-button:hover {
+
+
+    background:#dc2626;
+
+
+}
+
+
+
+
+
+/* FILE BUTTONS */
+
+
+.file-button {
+
+
+    background:
+
+    rgba(47,140,255,.18);
+
+
+    border:
+
+    1px solid rgba(47,140,255,.35);
+
+
+    color:#8ec5ff;
+
+
+}
+
+
+
+.file-button:hover {
+
+
+    background:#2f8cff;
+
+
+    color:white;
+
+
+}
+
+
+
+
+
+
+
+/* SEARCH BAR */
+
+
+.admin-toolbar input,
+.admin-toolbar select {
+
+
+    background:#171c24;
+
+
+    color:white;
+
+
+    border:
+
+    1px solid rgba(255,255,255,.1);
+
+
+}
+
+
+
+.admin-toolbar input::placeholder {
+
+
+    color:#94a3b8;
+
+
+}
+
+
+
+
+
+
+
+/* ANALYTICS WORKSHOP LOOK */
+
+
+.analytics-card {
+
+
+    background:
+
+    linear-gradient(
+
+    145deg,
+
+    #171c24,
+
+    #0d1117
+
+    );
+
+
+}
+
+
+
+
+
+.analytics-stat {
+
+
+    background:
+
+    linear-gradient(
+
+    145deg,
+
+    #202733,
+
+    #171c24
+
+    );
+
+
+}
+
+
+
+
+
+.analytics-stat:hover {
+
+
+    border-color:#2f8cff;
+
+
+    transform:
+
+    translateY(-6px);
+
+
+}
+
+
+
+
+
+/* TABLE */
+
+.analytics-card table {
+
+
+    border-radius:16px;
+
+
+    overflow:hidden;
+
+
+}
+
+
+
+
+
+.analytics-card th {
+
+
+    color:#4b9eff;
+
+
+}
+
+
+
+
+
+.analytics-card tr:hover {
+
+
+    background:
+
+    rgba(47,140,255,.08);
+
+
+}
+
+
+
+
+
+
+
+/* MOBILE ADMIN BUTTONS */
+
+
+@media(max-width:768px){
+
+
+
+.nav > div:last-child {
+
+
+    width:100%;
+
+
+    justify-content:center;
+
+
+}
+
+
+
+.nav button {
+
+
+    flex:1;
+
+
+}
+
+
+
+
+}
+
+/* =====================================================
+   ADMIN REFRESH BUTTON FIX
+===================================================== */
+
+
+.nav .secondary {
+
+    background:#171c24;
+
+    color:white;
+
+    border:
+
+    2px solid #2f8cff;
+
+    box-shadow:
+
+    0 8px 25px rgba(47,140,255,.15);
+
+}
+
+
+
+.nav .secondary:hover {
+
+    background:#2f8cff;
+
+    color:white;
+
+    transform:translateY(-3px);
+
+    box-shadow:
+
+    0 15px 35px rgba(47,140,255,.35);
+
+}
+
+/* =====================================================
+   STATUS COLOR SYSTEM
+===================================================== */
+
+
+/* NEW */
+
+.stat-card[data-status="New"]::before {
+
+    background:#2f8cff;
+
+}
+
+
+.stat-card[data-status="New"] h2 {
+
+    color:#4b9eff;
+
+}
+
+
+
+
+
+
+/* REVIEWING */
+
+.stat-card[data-status="Reviewing"]::before {
+
+    background:#facc15;
+
+}
+
+
+.stat-card[data-status="Reviewing"] h2 {
+
+    color:#facc15;
+
+}
+
+
+
+
+
+
+/* QUOTED */
+
+.stat-card[data-status="Quoted"]::before {
+
+    background:#a855f7;
+
+}
+
+
+.stat-card[data-status="Quoted"] h2 {
+
+    color:#c084fc;
+
+}
+
+
+
+
+
+
+/* PRINTING */
+
+.stat-card[data-status="Printing"]::before {
+
+    background:#f97316;
+
+}
+
+
+.stat-card[data-status="Printing"] h2 {
+
+    color:#fb923c;
+
+}
+
+
+
+
+
+
+/* COMPLETED */
+
+.stat-card[data-status="Completed"]::before {
+
+    background:#22c55e;
+
+}
+
+
+.stat-card[data-status="Completed"] h2 {
+
+    color:#4ade80;
+
+}
+
+
+
+
+
+
+/* ARCHIVED */
+
+.stat-card[data-status="Archived"]::before {
+
+    background:#64748b;
+
+}
+
+
+.stat-card[data-status="Archived"] h2 {
+
+    color:#94a3b8;
+
+}
+
+
+
+
+
+
+
+/* STATUS CARD GLOW */
+
+
+.stat-card:hover {
+
+
+    box-shadow:
+
+    0 15px 40px rgba(47,140,255,.18);
+
+
+}
+
+/* =============================
+   QUOTE ID DISPLAY
+============================= */
+
+
+.quote-id-box {
+
+
+background:
+
+rgba(47,140,255,.12);
+
+
+border:
+
+1px solid rgba(47,140,255,.35);
+
+
+padding:20px;
+
+
+border-radius:15px;
+
+
+margin:25px 0;
+
+
+}
+
+
+
+.quote-id-box span {
+
+
+font-size:1.5rem;
+
+
+font-weight:700;
+
+
+color:#4b9eff;
+
+
+letter-spacing:1px;
+
+
+}
+
+/* =============================
+   PROJECT TIMELINE
+============================= */
+
+
+#projectTimeline{
+
+position:relative;
+
+margin-top:30px;
+
+padding-left:25px;
+
+}
+
+
+
+.timeline-step{
+
+display:flex;
+
+position:relative;
+
+padding-bottom:30px;
+
+}
+
+
+
+.timeline-step:not(:last-child)::before{
+
+content:"";
+
+position:absolute;
+
+left:10px;
+
+top:24px;
+
+height:calc(100% - 5px);
+
+width:2px;
+
+background:rgba(255,255,255,.15);
+
+}
+
+
+
+.timeline-dot{
+
+width:22px;
+
+height:22px;
+
+border-radius:50%;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+font-size:.8rem;
+
+font-weight:bold;
+
+margin-right:20px;
+
+background:#2f8cff;
+
+color:white;
+
+z-index:2;
+
+}
+
+
+
+.timeline-content{
+
+background:rgba(255,255,255,.05);
+
+padding:15px 20px;
+
+border-radius:14px;
+
+flex:1;
+
+}
+
+
+
+.timeline-content h4{
+
+margin:0 0 8px;
+
+font-size:1.1rem;
+
+}
+
+
+
+.timeline-content p{
+
+margin:0;
+
+opacity:.8;
+
+}
+
+
+
+.timeline-content span{
+
+display:block;
+
+margin-top:8px;
+
+font-size:.9rem;
+
+opacity:.6;
+
+}
+
+
+
+
+.timeline-step.current .timeline-content{
+
+border:1px solid rgba(47,140,255,.5);
+
+background:rgba(47,140,255,.12);
+
+}
+
+
+
+.timeline-step.current .timeline-dot{
+
+transform:scale(1.15);
+
+}
+
+/* =================================
+   PRIMARY BUTTON FIX
+================================= */
+
+
+.primary{
+
+display:inline-block;
+
+background:#ffffff;
+
+color:#111111 !important;
+
+padding:12px 24px;
+
+border-radius:10px;
+
+font-weight:600;
+
+text-decoration:none;
+
+border:2px solid #ffffff;
+
+transition:.25s ease;
+
+cursor:pointer;
+
+}
+
+
+
+.primary:hover{
+
+background:transparent;
+
+color:#ffffff !important;
+
+border-color:#ffffff;
+
+}
+
+/* =================================
+   PRIMARY BUTTON TEXT FIX
+================================= */
+
+
+.primary{
+
+background:#2f8cff;
+
+color:#000000 !important;
+
+border:2px solid #2f8cff;
+
+padding:12px 24px;
+
+border-radius:10px;
+
+font-weight:700;
+
+text-decoration:none;
+
+display:inline-block;
+
+transition:.25s ease;
+
+cursor:pointer;
+
+}
+
+
+
+.primary:hover{
+
+background:#4aa0ff;
+
+color:#000000 !important;
+
+border-color:#4aa0ff;
+
+}
+
+/* =================================
+   CONTACT CARD ENHANCEMENT
+================================= */
+
+
+.contact-card{
+
+background:rgba(255,255,255,0.06);
+
+border:1px solid rgba(255,255,255,0.12);
+
+border-radius:18px;
+
+padding:30px;
+
+box-shadow:
+
+0 10px 30px rgba(0,0,0,0.35),
+
+0 0 20px rgba(47,140,255,0.08);
+
+transition:transform .25s ease, box-shadow .25s ease;
+
+}
+
+
+
+.contact-card:hover{
+
+transform:translateY(-6px);
+
+box-shadow:
+
+0 15px 40px rgba(0,0,0,0.45),
+
+0 0 30px rgba(47,140,255,0.18);
+
+}
+
+/* =====================================
+   PROJECT TRACKING TIMELINE
+===================================== */
+
+
+.timeline-step {
+
+    display:flex;
+
+    gap:25px;
+
+    position:relative;
+
+    padding:20px 0;
+
+}
+
+
+
+.timeline-step:not(:last-child)::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:12px;
+
+    top:45px;
+
+    width:2px;
+
+    height:60px;
+
+    background:#d1d5db;
+
+}
+
+
+
+
+
+.timeline-dot{
+
+    width:24px;
+
+    height:24px;
+
+    border-radius:50%;
+
+    background:#d1d5db;
+
+    color:white;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-weight:bold;
+
+    flex-shrink:0;
+
+}
+
+
+
+
+
+/* COMPLETED STEPS */
+
+.timeline-step.complete .timeline-dot{
+
+    background:#2f8cff;
+
+}
+
+
+
+
+
+.timeline-step.complete .timeline-content h4{
+
+    color:#222;
+
+}
+
+
+
+
+
+/* CURRENT STEP */
+
+.timeline-step.current{
+
+    background:#dbeafe;
+
+    border:1px solid #2f8cff;
+
+    border-radius:12px;
+
+    padding:20px;
+
+}
+
+
+
+.timeline-step.current .timeline-dot{
+
+    background:#2f8cff;
+
+    box-shadow:
+
+    0 0 15px rgba(47,140,255,.7);
+
+}
+
+
+
+
+
+/* FUTURE STEPS */
+
+.timeline-step.upcoming .timeline-dot{
+
+    background:#d1d5db;
+
+}
+
+
+
+.timeline-step.upcoming .timeline-content{
+
+    opacity:.45;
+
+}
+
+
+
+.timeline-content h4{
+
+    margin-bottom:8px;
+
+}
+
+
+
+.timeline-content p{
+
+    color:#64748b;
+
+}
+
+
+
+.timeline-content span{
+
+    color:#94a3b8;
+
+    font-size:.9rem;
+
+}
+
+/* =====================================
+   PROJECT TIMELINE TEXT VISIBILITY FIX
+===================================== */
+
+
+/* Completed steps stay fully visible */
+
+.timeline-step.complete .timeline-content {
+
+    opacity:1;
+
+}
+
+
+.timeline-step.complete .timeline-content h4 {
+
+    color:#1f2937;
+
+    font-weight:700;
+
+}
+
+
+.timeline-step.complete .timeline-content p {
+
+    color:#64748b;
+
+}
+
+
+.timeline-step.complete .timeline-content span {
+
+    color:#94a3b8;
+
+}
+
+
+
+
+
+/* Current step */
+
+.timeline-step.current .timeline-content h4 {
+
+    color:#111827;
+
+    font-weight:700;
+
+}
+
+
+.timeline-step.current .timeline-content p {
+
+    color:#475569;
+
+}
+
+
+
+
+
+/* Future steps are the only faded ones */
+
+.timeline-step.upcoming .timeline-content {
+
+    opacity:.45;
+
+}
+
+
+.timeline-step.upcoming .timeline-content h4 {
+
+    color:#64748b;
+
+}
