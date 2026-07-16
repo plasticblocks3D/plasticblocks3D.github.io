@@ -25,6 +25,8 @@ setupSearch();
 
 setupFilter();
 
+setupStatusCards();
+
 
 await loadQuotes();
 
@@ -907,13 +909,8 @@ allQuotes.filter(q=>
 
 function setupFilter(){
 
-
-let filter=
-
-document.getElementById(
-"statusFilter"
-);
-
+const filter =
+document.getElementById("statusFilter");
 
 
 if(!filter)
@@ -921,10 +918,17 @@ return;
 
 
 
-filter.onchange=()=>{
+filter.addEventListener(
+"change",
+()=>{
 
 
-if(filter.value==="all"){
+const value =
+filter.value;
+
+
+
+if(value==="all"){
 
 displayQuotes(allQuotes);
 
@@ -937,13 +941,64 @@ return;
 displayQuotes(
 
 allQuotes.filter(
-q=>q.status===filter.value
+q=>q.status===value
 )
 
 );
 
 
-};
+});
+
+
+}
+
+
+
+
+
+
+
+// =============================
+// STATUS CARD FILTERS
+// =============================
+
+
+function setupStatusCards(){
+
+
+const cards =
+document.querySelectorAll(
+".filter-card"
+);
+
+
+
+cards.forEach(card=>{
+
+
+card.addEventListener(
+"click",
+()=>{
+
+
+const status =
+card.dataset.status;
+
+
+
+displayQuotes(
+
+allQuotes.filter(
+q=>q.status===status
+)
+
+);
+
+
+});
+
+
+});
 
 
 }
@@ -964,15 +1019,12 @@ q=>q.status===filter.value
 async function loadAnalytics(){
 
 
-
 const {
-
 data,
-
 error
+}
 
-}=
-
+=
 await supabaseClient
 
 .from("site_visits")
@@ -981,35 +1033,73 @@ await supabaseClient
 
 
 
+if(error){
 
-if(error)
+console.error(
+"Analytics error:",
+error
+);
+
 return;
 
+}
+
+
+
+const visits =
+data || [];
+
+
+
+
+
+// TOTAL
 
 
 document.getElementById(
 "totalVisitors"
-).textContent=data.length;
+).textContent =
+visits.length;
 
 
 
 
-let today=
 
+
+
+// TODAY
+
+
+const today =
 new Date()
-
 .toISOString()
-
 .split("T")[0];
 
 
 
 document.getElementById(
 "todayVisitors"
-).textContent=
+).textContent =
 
-data.filter(
-v=>v.date===today
+
+visits.filter(
+v=>{
+
+let d =
+v.created_at
+?
+new Date(v.created_at)
+.toISOString()
+.split("T")[0]
+:
+v.date;
+
+
+return d===today;
+
+
+}
+
 ).length;
 
 
@@ -1017,20 +1107,67 @@ v=>v.date===today
 
 
 
+
+
+
+// THIS WEEK
+
+
+const weekAgo =
+new Date();
+
+
+
+weekAgo.setDate(
+weekAgo.getDate()-7
+);
+
+
+
+document.getElementById(
+"weekVisitors"
+).textContent =
+
+
+visits.filter(
+v=>
+
+
+new Date(
+v.created_at
+) >= weekAgo
+
+
+).length;
+
+
+
+
+
+
+
+
+
+// PAGE COUNTS
+
+
 let pages={};
 
 
 
-data.forEach(v=>{
+visits.forEach(v=>{
 
 
-let p=v.page||"/";
+let page =
+v.page || "/";
 
 
-pages[p]=(pages[p]||0)+1;
+pages[page] =
+(pages[page] || 0)+1;
 
 
 });
+
 
 
 
@@ -1044,14 +1181,15 @@ let highest=0;
 
 Object.entries(pages)
 
-.forEach(([p,c])=>{
+.forEach(
+([page,count])=>{
 
 
-if(c>highest){
+if(count>highest){
 
-highest=c;
+highest=count;
 
-top=p;
+top=page;
 
 }
 
@@ -1060,10 +1198,209 @@ top=p;
 
 
 
+
 document.getElementById(
 "topPage"
-).textContent=top;
+).textContent =
+top;
 
+
+
+
+
+
+
+// TABLE
+
+
+const table =
+document.getElementById(
+"pageStats"
+);
+
+
+
+if(table){
+
+
+table.innerHTML="";
+
+
+Object.entries(pages)
+
+.sort(
+(a,b)=>b[1]-a[1]
+)
+
+.forEach(
+([page,count])=>{
+
+
+table.innerHTML += `
+
+<tr>
+
+<td>${page}</td>
+
+<td>${count}</td>
+
+</tr>
+
+`;
+
+
+});
+
+
+}
+
+
+
+
+
+
+
+
+
+// GRAPH
+
+
+let labels=[];
+
+let values=[];
+
+
+
+for(let i=6;i>=0;i--){
+
+
+let d =
+new Date();
+
+
+d.setDate(
+d.getDate()-i
+);
+
+
+
+let day =
+d.toISOString()
+.split("T")[0];
+
+
+
+labels.push(
+day.substring(5)
+);
+
+
+
+values.push(
+
+visits.filter(
+v=>{
+
+
+let visitDate =
+v.created_at
+?
+new Date(v.created_at)
+.toISOString()
+.split("T")[0]
+:
+v.date;
+
+
+return visitDate===day;
+
+
+}
+
+).length
+
+);
+
+
+
+}
+
+
+
+
+
+
+
+
+if(visitorChart){
+
+visitorChart.destroy();
+
+}
+
+
+
+
+const canvas =
+document.getElementById(
+"visitorChart"
+);
+
+
+
+if(canvas){
+
+
+visitorChart =
+new Chart(
+canvas,
+{
+
+type:"line",
+
+data:{
+
+
+labels:labels,
+
+
+datasets:[{
+
+label:"Visitors",
+
+data:values,
+
+borderWidth:3,
+
+tension:.3,
+
+fill:true
+
+}]
+
+
+},
+
+
+
+options:{
+
+
+responsive:true,
+
+
+maintainAspectRatio:false
+
+
+}
+
+
+}
+
+);
+
+
+}
 
 
 
