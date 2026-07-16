@@ -433,6 +433,15 @@ Upload Files
 </label>
 
 
+<div class="file-upload-box">
+
+<label for="projectFiles">
+
+📁 Choose Project Files
+
+</label>
+
+
 <input
 
 id="projectFiles"
@@ -441,17 +450,45 @@ type="file"
 
 multiple
 
-accept=".stl,.obj,.3mf,.step,.stp,.jpg,.jpeg,.png,.pdf"
+accept="
+.stl,
+.obj,
+.3mf,
+.step,
+.stp,
+.step,
+.iges,
+.igs,
+.f3d,
+.sldprt,
+.dxf,
+.svg,
+.png,
+.jpg,
+.jpeg,
+.webp,
+.gif,
+.pdf
+"
 
 >
 
 
+<p id="fileCount">
+
+No files selected
+
+</p>
+
 
 <p>
 
-Upload models, drawings, pictures, or reference files.
+Upload CAD models, 3D files, drawings, pictures, or reference documents.
 
 </p>
+
+
+</div>
 
 
 
@@ -647,6 +684,35 @@ Project Updates
 <script src="../js/supabase.js"></script>
 
 <script src="../js/tracking.js"></script>
+
+<script>
+
+document
+.getElementById("projectFiles")
+.addEventListener(
+"change",
+function(){
+
+let count=this.files.length;
+
+
+document.getElementById("fileCount").textContent =
+
+count === 0
+
+?
+
+"No files selected"
+
+:
+
+`${count} file${count>1?"s":""} selected`;
+
+}
+
+);
+
+</script>
 
 <script src="../js/quote.js"></script>
 
