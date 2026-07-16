@@ -113,18 +113,12 @@ await supabaseClient
 
 
 .eq(
-
 "quote_id",
-
 quoteID
-
 )
 
 
-.single();
-
-
-
+.maybeSingle();
 
 
 
