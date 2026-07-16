@@ -6,276 +6,349 @@ const form = document.getElementById("projectForm");
 
 form.addEventListener("submit", async function(event){
 
-event.preventDefault();
+    event.preventDefault();
 
 
-const button = this.querySelector("button");
+    const button = this.querySelector("button");
 
 
-button.disabled = true;
-button.innerHTML = "Uploading files...";
+    button.disabled = true;
+    button.innerHTML = "Preparing request...";
 
 
 
-const name =
-document.getElementById("projectCustomerName").value.trim();
+    const name = 
+    document.getElementById("projectCustomerName")
+    .value.trim();
 
 
-const email =
-document.getElementById("projectCustomerEmail").value.trim();
+    const email =
+    document.getElementById("projectCustomerEmail")
+    .value.trim();
 
 
-const projectName =
-document.getElementById("projectName").value.trim();
+    const projectName =
+    document.getElementById("projectName")
+    .value.trim();
 
 
-const projectType =
-document.getElementById("projectType").value;
+    const projectType =
+    document.getElementById("projectType")
+    .value;
 
 
-const details =
-document.getElementById("projectDetails").value.trim();
+    const details =
+    document.getElementById("projectDetails")
+    .value.trim();
 
 
-const fileInput =
-document.getElementById("projectFiles");
+    const fileInput =
+    document.getElementById("projectFiles");
 
 
-const files =
-Array.from(fileInput.files);
+    const files =
+    Array.from(fileInput.files || []);
 
 
 
-let uploadedFiles = [];
+    let uploadedFiles = [];
 
 
 
+    // ===============================
+    // UPLOAD FILES
+    // ===============================
 
 
-// ===============================
-// UPLOAD FILES
-// ===============================
+    try{
 
 
-try{
+        if(files.length > 0){
 
 
-for(let file of files){
+            for(let i = 0; i < files.length; i++){
 
 
-button.innerHTML =
-`Uploading ${uploadedFiles.length + 1}/${files.length}...`;
+                const file = files[i];
 
 
+                button.innerHTML =
+                `Uploading ${i + 1}/${files.length}...`;
 
-const cleanName =
-file.name.replace(
-/[^a-zA-Z0-9.-]/g,
-"_"
-);
 
 
+                const cleanName =
+                file.name.replace(
+                    /[^a-zA-Z0-9._-]/g,
+                    "_"
+                );
 
-const path =
-`${crypto.randomUUID()}-${cleanName}`;
 
 
+                const path =
+                `${crypto.randomUUID()}-${cleanName}`;
 
 
 
-const {error} =
+                const {error:uploadError} =
 
-await supabaseClient
+                await supabaseClient
 
-.storage
+                .storage
 
-.from("quote-files")
+                .from("quote-files")
 
-.upload(
+                .upload(
+                    path,
+                    file,
+                    {
+                        cacheControl:"3600",
+                        upsert:false
+                    }
+                );
 
-path,
 
-file,
 
-{
+                if(uploadError){
 
-cacheControl:"3600",
+                    console.error(
+                        "Upload error:",
+                        uploadError
+                    );
 
-upsert:false
+                    throw uploadError;
 
-}
+                }
 
-);
 
 
+                const {data:urlData} =
 
-if(error){
+                supabaseClient
 
-throw error;
+                .storage
 
-}
+                .from("quote-files")
 
+                .getPublicUrl(path);
 
 
 
+                uploadedFiles.push({
 
-const publicURL =
+                    name:file.name,
 
-supabaseClient
+                    url:urlData.publicUrl
 
-.storage
+                });
 
-.from("quote-files")
 
-.getPublicUrl(path)
-.data.publicUrl;
 
+            }
 
 
-uploadedFiles.push({
+        }
 
-name:file.name,
 
-url:publicURL
+    }
 
-});
 
+    catch(error){
 
 
-}
+        console.error(
+            "UPLOAD FAILED:",
+            error
+        );
 
 
+        alert(
+            "File upload failed. Check Supabase Storage permissions."
+        );
 
-}
 
-catch(error){
+        button.disabled=false;
 
+        button.innerHTML =
+        "Request Quote";
 
-console.error(
-"UPLOAD FAILED",
-error
-);
 
+        return;
 
 
-alert(
-"File upload failed. Check Supabase Storage permissions."
-);
+    }
 
 
 
-button.disabled=false;
 
-button.innerHTML =
-"Request Quote";
+    // ===============================
+    // PREPARE FILE LIST
+    // ===============================
 
 
-return;
+    const fileText =
 
+    uploadedFiles.length > 0
 
-}
+    ?
 
+    uploadedFiles
+    .map(file =>
+        `${file.name}: ${file.url}`
+    )
+    .join("\n")
 
 
+    :
 
+    "No files uploaded";
 
-// ===============================
-// SAVE REQUEST
-// ===============================
 
 
-button.innerHTML =
-"Sending request...";
 
 
 
-const fileText =
+    console.log(
+        "Submitting quote:",
+        {
 
-uploadedFiles
+            name:name,
 
-.map(
+            email:email,
 
-file =>
-`${file.name}: ${file.url}`
+            projectName:projectName,
 
-)
+            projectType:projectType,
 
-.join("\n");
+            details:details,
 
+            files:uploadedFiles
 
+        }
+    );
 
 
 
-const {error} =
 
-await supabaseClient
 
-.from("quote_requests")
+    // ===============================
+    // SAVE REQUEST
+    // ===============================
 
-.insert([
 
-{
+    button.innerHTML =
+    "Sending request...";
 
-name,
 
-email,
 
-project_name:projectName,
+    const {
 
-project_type:projectType,
+        data,
 
-details,
+        error
 
-file_link:fileText,
+    } = await supabaseClient
 
-status:"New"
 
-}
+    .from("quote_requests")
 
-]);
 
+    .insert([
 
+        {
 
+            name:name,
 
+            email:email,
 
+            project_name:projectName,
 
-if(error){
+            project_type:projectType,
 
+            details:details,
 
-console.error(
-error
-);
+            file_link:fileText,
 
+            status:"New"
 
-alert(
-"Could not submit request."
-);
+        }
 
+    ])
 
+    .select();
 
-button.disabled=false;
 
-button.innerHTML =
-"Request Quote";
 
 
-return;
 
 
-}
+    console.log(
 
+        "Database response:",
 
+        {
 
+            data:data,
 
+            error:error
 
-alert(
-"Your project request was sent!"
-);
+        }
 
+    );
 
 
-window.location.href =
-"../thank-you.html";
+
+
+
+
+    if(error){
+
+
+        console.error(
+            "DATABASE ERROR:",
+            error
+        );
+
+
+        alert(
+            "Could not submit request."
+        );
+
+
+        button.disabled=false;
+
+        button.innerHTML =
+        "Request Quote";
+
+
+        return;
+
+
+    }
+
+
+
+
+
+    alert(
+        uploadedFiles.length > 0
+
+        ?
+
+        `Your request was sent with ${uploadedFiles.length} uploaded file(s)!`
+
+        :
+
+        "Your request was sent!"
+
+    );
+
+
+
+
+
+    window.location.href =
+    "../thank-you.html";
 
 
 
