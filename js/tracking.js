@@ -3,81 +3,62 @@ console.log("Visitor tracking loaded");
 
 async function trackVisit() {
 
-    try {
+    const visitorID =
+        localStorage.getItem("visitor_id") ||
+        crypto.randomUUID();
 
-        let visitorID = localStorage.getItem("visitor_id");
-
-
-        if (!visitorID) {
-
-            visitorID = crypto.randomUUID();
-
-            localStorage.setItem(
-                "visitor_id",
-                visitorID
-            );
-
-        }
+    localStorage.setItem(
+        "visitor_id",
+        visitorID
+    );
 
 
-        const now = new Date();
+    const now = new Date();
 
 
-        const visitData = {
+    const visit = {
 
-            visitor_id: visitorID,
+        visitor_id: visitorID,
 
-            hour: now.getHours(),
+        hour: now.getHours(),
 
-            date: now.toISOString().split("T")[0],
+        date: now.toISOString().split("T")[0],
 
-            page: window.location.pathname
+        page: window.location.pathname
 
-        };
-
-
-        console.log(
-            "Sending visit:",
-            visitData
-        );
+    };
 
 
-        const { data, error } = await supabaseClient
-            .from("site_visits")
-            .insert(visitData)
-            .select();
+    console.log("Sending visit:", visit);
 
 
-
-        if(error){
-
-            console.error(
-                "Tracking failed:",
-                error
-            );
-
-            return;
-
-        }
+    const result = await supabaseClient
+        .from("site_visits")
+        .insert(visit);
 
 
-        console.log(
-            "Visit recorded:",
-            data
-        );
+    console.log(
+        "FULL SUPABASE RESULT:",
+        result
+    );
 
 
-    }
-
-    catch(err){
+    if(result.error){
 
         console.error(
-            "Tracking exception:",
-            err
+            "ANALYTICS FAILED:",
+            result.error.message
         );
 
     }
 
+    else {
+
+        console.log(
+            "Analytics saved!"
+        );
+
+    }
 
 }
 
