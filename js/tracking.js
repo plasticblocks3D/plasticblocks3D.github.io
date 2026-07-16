@@ -1,49 +1,85 @@
-console.log("TRACKING LOADED");
+console.log("Visitor tracking loaded");
 
 
-async function trackVisit(){
+async function trackVisit() {
+
+    try {
+
+        let visitorID = localStorage.getItem("visitor_id");
 
 
-const page =
-window.location.pathname;
+        if (!visitorID) {
+
+            visitorID = crypto.randomUUID();
+
+            localStorage.setItem(
+                "visitor_id",
+                visitorID
+            );
+
+        }
+
+
+        const now = new Date();
+
+
+        const visitData = {
+
+            visitor_id: visitorID,
+
+            hour: now.getHours(),
+
+            date: now.toISOString().split("T")[0],
+
+            page: window.location.pathname
+
+        };
+
+
+        console.log(
+            "Sending visit:",
+            visitData
+        );
+
+
+        const { data, error } = await supabaseClient
+            .from("site_visits")
+            .insert(visitData)
+            .select();
 
 
 
-const {error} = await supabaseClient
+        if(error){
 
-.from("site_visits")
+            console.error(
+                "Tracking failed:",
+                error
+            );
 
-.insert([
+            return;
 
-{
+        }
 
-page:page
+
+        console.log(
+            "Visit recorded:",
+            data
+        );
+
+
+    }
+
+    catch(err){
+
+        console.error(
+            "Tracking exception:",
+            err
+        );
+
+    }
+
 
 }
-
-]);
-
-
-if(error){
-
-console.error(
-"Tracking error:",
-error
-);
-
-}
-
-else{
-
-console.log(
-"Visit recorded"
-);
-
-}
-
-
-}
-
 
 
 trackVisit();
