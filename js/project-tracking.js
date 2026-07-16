@@ -4,7 +4,7 @@
 
 
 console.log(
-"Project Tracking Loaded"
+"Project Tracking Loaded - VERSION 2"
 );
 
 
