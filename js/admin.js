@@ -941,75 +941,53 @@ window.location.href="login.html";
 async function loadAnalytics(){
 
 
-
-const {data,error}=
-
-await supabaseClient
+const {data,error}=await supabaseClient
 
 .from("site_visits")
 
-.select("created_at");
-
-
+.select("*");
 
 
 
 if(error){
-
 
 console.error(
 "Analytics error:",
 error
 );
 
-
 return;
-
 
 }
 
 
 
 
-document.getElementById(
+// TOTAL VISITORS
 
+document.getElementById(
 "totalVisitors"
-
-)
-
-.textContent=data.length;
+).textContent=data.length;
 
 
 
 
 
-let today=
+// TODAY
 
-new Date()
-
-.toDateString();
-
-
+let today=new Date()
+.toISOString()
+.split("T")[0];
 
 
 
 document.getElementById(
-
 "todayVisitors"
-
-)
-
-.textContent=
+).textContent=
 
 
-data.filter(v=>
-
-new Date(
-v.created_at
-)
-
-.toDateString()===today
-
+data.filter(
+v=>v.date===today
 ).length;
 
 
@@ -1017,34 +995,198 @@ v.created_at
 
 
 
-let hours=
+// THIS WEEK
 
-Array(24).fill(0);
+let weekAgo=new Date();
+
+weekAgo.setDate(
+weekAgo.getDate()-7
+);
 
 
+
+let weekVisitors=data.filter(v=>
+
+new Date(v.created_at)>=weekAgo
+
+);
+
+
+
+document.getElementById(
+"weekVisitors"
+).textContent=
+
+weekVisitors.length;
+
+
+
+
+
+
+
+// PAGE STATISTICS
+
+
+let pages={};
 
 
 
 data.forEach(v=>{
 
 
-let hour=
-
-new Date(
-
-v.created_at
-
-)
-
-.getHours();
+let page=v.page || "/";
 
 
+if(!pages[page]){
 
-hours[hour]++;
+pages[page]=0;
 
+}
+
+
+pages[page]++;
 
 
 });
+
+
+
+
+
+
+
+// MOST VISITED PAGE
+
+
+let topPage="-";
+
+let highest=0;
+
+
+Object.keys(pages).forEach(page=>{
+
+
+if(pages[page]>highest){
+
+highest=pages[page];
+
+topPage=page;
+
+}
+
+
+});
+
+
+
+document.getElementById(
+"topPage"
+).textContent=
+
+topPage;
+
+
+
+
+
+
+
+// PAGE TABLE
+
+
+let table=document.getElementById(
+"pageStats"
+);
+
+
+table.innerHTML="";
+
+
+
+Object.entries(pages)
+
+.sort((a,b)=>b[1]-a[1])
+
+.slice(0,10)
+
+.forEach(([page,count])=>{
+
+
+table.innerHTML+=
+
+
+`
+
+<tr>
+
+<td>
+${page}
+</td>
+
+<td>
+${count}
+</td>
+
+</tr>
+
+`;
+
+
+});
+
+
+
+
+
+
+
+
+
+// 7 DAY GRAPH
+
+
+let days=[];
+
+let counts=[];
+
+
+
+for(let i=6;i>=0;i--){
+
+
+let d=new Date();
+
+d.setDate(
+d.getDate()-i
+);
+
+
+
+let date=d
+.toISOString()
+.split("T")[0];
+
+
+
+days.push(
+date.substring(5)
+);
+
+
+
+counts.push(
+
+data.filter(v=>
+
+v.date===date
+
+).length
+
+);
+
+
+}
 
 
 
@@ -1060,16 +1202,10 @@ visitorChart.destroy();
 
 
 
-
-
-visitorChart=
-
-new Chart(
+visitorChart=new Chart(
 
 document.getElementById(
-
 "visitorChart"
-
 ),
 
 {
@@ -1081,61 +1217,57 @@ type:"bar",
 data:{
 
 
-labels:[
-
-"12AM",
-"1AM",
-"2AM",
-"3AM",
-"4AM",
-"5AM",
-"6AM",
-"7AM",
-"8AM",
-"9AM",
-"10AM",
-"11AM",
-"12PM",
-"1PM",
-"2PM",
-"3PM",
-"4PM",
-"5PM",
-"6PM",
-"7PM",
-"8PM",
-"9PM",
-"10PM",
-"11PM"
-
-],
+labels:days,
 
 
 datasets:[{
 
+
 label:"Visitors",
 
-data:hours
+data:counts
+
 
 }]
 
 
+},
+
+
+
+options:{
+
+
+responsive:true,
+
+
+plugins:{
+
+
+legend:{
+
+
+display:true
+
+
+}
+
+
+}
+
+
 }
 
 
 
 }
+
 
 );
 
 
 
 }
-
-
-
-
-
 
 
 
