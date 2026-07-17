@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Website Analytics | PlasticBlocks3D</title>
+
+<link rel="stylesheet" href="../css/style.css">
+
+<link rel="icon" href="../images/logos/logo.png">
+
+</head>
+
+<body>
+
+<header class="nav">
+
+<div class="brand">
+
+<a href="../index.html" class="logo-link">
+
+<img
+src="../images/logos/logo.png"
+alt="PlasticBlocks3D Logo">
+
+</a>
+
+<div>
+
+<h2>
+PlasticBlocks3D
+</h2>
+
+<p>
+Website Analytics
+</p>
+
+</div>
+
+</div>
+
+<div>
+
+<a
+href="admin.html"
+class="secondary">
+
+← Quotes
+
+</a>
+
+<button
+id="logoutButton"
+class="primary">
+
+Logout
+
+</button>
+
+</div>
+
+</header>
+
+<section class="page-header">
+
+<h1>
+Website Analytics
+</h1>
+
+<p>
+View website traffic, customer activity, and business statistics.
+</p>
+
+</section>
+
+<main class="admin-page">
+
+<section class="dashboard-stats">
+
+<div class="stat-card">
+<h2 id="totalVisitors">0</h2>
+<p>Total Visitors</p>
+</div>
+
+<div class="stat-card">
+<h2 id="todayVisitors">0</h2>
+<p>Visitors Today</p>
+</div>
+
+<div class="stat-card">
+<h2 id="weekVisitors">0</h2>
+<p>This Week</p>
+</div>
+
+<div class="stat-card">
+<h2 id="totalQuotes">0</h2>
+<p>Total Quotes</p>
+</div>
+
+<div class="stat-card">
+<h2 id="conversionRate">0%</h2>
+<p>Conversion Rate</p>
+</div>
+
+<div class="stat-card">
+<h2 id="completedProjects">0</h2>
+<p>Completed Projects</p>
+</div>
+
+</section>
+
+<section class="analytics-card">
+
+<h2>
+Visitor Activity
+</h2>
+
+<div class="chart-container">
+
+<canvas id="visitorChart"></canvas>
+
+</div>
+
+</section>
+
+<section class="analytics-card">
+
+<h2>
+Most Visited Pages
+</h2>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Page</th>
+
+<th>Views</th>
+
+</tr>
+
+</thead>
+
+<tbody id="pageStats">
+
+<tr>
+
+<td colspan="2">
+
+Loading...
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</section>
+
+<section class="analytics-card">
+
+<h2>
+Recent Quote Activity
+</h2>
+
+<div id="recentQuotes">
+
+Loading...
+
+</div>
+
+</section>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="../js/supabase.js"></script>
+
+<script src="../js/auth.js"></script>
+
+<script src="../js/analytics.js"></script>
+
+</body>
+
+</html>

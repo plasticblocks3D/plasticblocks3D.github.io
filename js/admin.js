@@ -1,3 +1,5 @@
+requireAdminLogin();
+
 console.log("ADMIN DASHBOARD LOADED");
 
 
