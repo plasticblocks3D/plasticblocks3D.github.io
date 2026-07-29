@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Track Project | PlasticBlocks3D</title>
+
+<link rel="icon" type="image/png" href="../images/logos/logo.png">
+
+<link rel="stylesheet" href="../css/style.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+
+</head>
+
+
+
+<body>
+
+
+<header class="nav">
+
+
+<div class="brand">
+
+
+<a href="../index.html" class="logo-link">
+
+<img src="../images/logos/logo.png" alt="PlasticBlocks3D Logo">
+
+</a>
+
+
+
+<div>
+
+<h2>
+PlasticBlocks3D
+</h2>
+
+
+<p>
+Designed. Engineered. Printed.
+</p>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<button class="menu-toggle" aria-label="Open Menu">
+
+<span></span>
+<span></span>
+<span></span>
+
+</button>
+
+
+
+
+<nav class="mobile-menu">
+
+
+<a href="../index.html">
+Home
+</a>
+
+
+<a href="services.html">
+Services
+</a>
+
+
+<a href="gallery.html">
+Gallery
+</a>
+
+
+<a href="quote.html">
+Request Quote
+</a>
+
+
+<a href="about.html">
+About
+</a>
+
+
+<a href="contact.html">
+Contact
+</a>
+
+
+
+<a href="login.html" class="admin-login-link">
+Admin Login
+</a>
+
+
+</nav>
+
+
+
+</header>
+
+
+
+
+
+
+
+
+
+<section class="page-header">
+
+
+<div class="container">
+
+
+<p class="section-label">
+PROJECT TRACKING
+</p>
+
+
+<h1>
+Track Your Project
+</h1>
+
+
+<p class="intro-text">
+
+Enter your Quote ID to view your current project status.
+
+</p>
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<section class="page-content">
+
+
+<div class="container">
+
+
+<div class="contact-card">
+
+
+
+<h2>
+Enter Quote ID
+</h2>
+
+
+
+<p>
+
+Your Quote ID can be found on your confirmation page.
+
+</p>
+
+
+
+<input
+
+id="quoteSearch"
+
+type="text"
+
+placeholder="Example: PB-2026-TSBJ"
+
+>
+
+
+
+<br><br>
+
+
+
+<button
+
+id="trackButton"
+
+class="primary">
+
+Check Status
+
+</button>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div
+
+id="resultCard"
+
+class="contact-card project-result-card"
+
+style="display:none; margin-top:30px;">
+
+
+
+<div class="current-status-card">
+
+
+<h3>
+Current Status
+</h3>
+
+
+<div id="statusDisplay">
+
+Loading...
+
+</div>
+
+
+</div>
+
+
+
+
+
+<h2>
+Project Information
+</h2>
+
+
+
+<div class="project-info-grid">
+
+
+<div>
+
+<strong>
+Project
+</strong>
+
+<p id="projectName"></p>
+
+</div>
+
+
+
+<div>
+
+<strong>
+Project Type
+</strong>
+
+<p id="projectType"></p>
+
+</div>
+
+
+
+<div>
+
+<strong>
+Submitted
+</strong>
+
+<p id="createdDate"></p>
+
+</div>
+
+
+
+<div>
+
+<strong>
+Last Updated
+</strong>
+
+<p id="updatedDate"></p>
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+<h3>
+Project Timeline
+</h3>
+
+
+
+<div id="projectTimeline">
+
+Loading timeline...
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<footer class="footer">
+
+
+<div class="container footer-grid">
+
+
+
+
+
+<div>
+
+
+<h2>
+PlasticBlocks3D
+</h2>
+
+
+<p class="footer-tagline">
+
+Designed. Engineered. Printed.
+
+</p>
+
+
+<p class="footer-text">
+
+Built by one maker,
+one project at a time.
+
+</p>
+
+
+</div>
+
+
+
+
+
+
+
+<div>
+
+
+<h3>
+Explore
+</h3>
+
+
+<ul class="footer-links">
+
+
+<li>
+<a href="../index.html">
+Home
+</a>
+</li>
+
+
+<li>
+<a href="services.html">
+Services
+</a>
+</li>
+
+
+<li>
+<a href="gallery.html">
+Gallery
+</a>
+</li>
+
+
+<li>
+<a href="about.html">
+About
+</a>
+</li>
+
+
+<li>
+<a href="contact.html">
+Contact
+</a>
+</li>
+
+
+</ul>
+
+
+</div>
+
+
+
+
+
+</div>
+
+
+
+
+
+<div class="copyright">
+
+© 2026 PlasticBlocks3D
+
+</div>
+
+
+
+</footer>
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="../js/supabase.js"></script>
+
+<script src="../js/tracking.js"></script>
+
+<script src="../js/project-tracking.js"></script>
+
+<script src="../js/script.js"></script>
+
+
+
+</body>
+
+</html>

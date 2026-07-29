@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Track Quote | PlasticBlocks3D</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+<header>
+
+<a href="index.html">
+
+<img src="images/logos/logo.png" alt="PlasticBlocks3D Logo">
+
+</a>
+
+</header>
+
+
+
+<main class="track-container">
+
+
+<h1>
+Track Your Project
+</h1>
+
+
+<p>
+Enter your Quote ID below to check your project status.
+</p>
+
+
+
+<input 
+id="quoteID"
+placeholder="Example: PB-2026-UIRW"
+>
+
+
+
+<button onclick="checkQuote()">
+Track Project
+</button>
+
+
+
+<div id="result"></div>
+
+
+
+</main>
+
+
+
+
+
+<script>
+
+function checkQuote(){
+
+
+const id = document
+.getElementById("quoteID")
+.value
+.trim();
+
+
+
+if(!id){
+
+document.getElementById("result").innerHTML =
+"Please enter your Quote ID.";
+
+return;
+
+}
+
+
+
+document.getElementById("result").innerHTML = `
+
+<h2>
+Quote Found
+</h2>
+
+<p>
+Quote ID:
+<b>${id}</b>
+</p>
+
+
+<p>
+Status:
+<b>Reviewing</b>
+</p>
+
+`;
+
+}
+
+</script>
+
+
+
+</body>
+
+</html>
