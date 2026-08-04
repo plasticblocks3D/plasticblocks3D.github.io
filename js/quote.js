@@ -513,3 +513,90 @@ button.innerHTML =
 
 
 }
+
+// =================================
+// QUICK MESSAGE FORM
+// =================================
+
+const messageForm = document.getElementById("messageForm");
+
+if (!messageForm) {
+
+    console.error("messageForm not found");
+
+} else {
+
+    messageForm.addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        const button = messageForm.querySelector("button");
+
+        button.disabled = true;
+        button.innerHTML = "Sending...";
+
+        try {
+
+            const name = document
+                .getElementById("messageName")
+                .value
+                .trim();
+
+            const email = document
+                .getElementById("messageEmail")
+                .value
+                .trim();
+
+            const message = document
+                .getElementById("messageText")
+                .value
+                .trim();
+
+
+            // Make sure fields aren't empty
+            if (!name || !email || !message) {
+                throw new Error("Please fill out all fields.");
+            }
+
+
+            // Send message to Supabase
+            const { error } = await supabaseClient
+                .from("messages")
+                .insert([{
+                    name: name,
+                    email: email,
+                    message: message
+                }]);
+
+
+            if (error) {
+                throw error;
+            }
+
+
+            // Success
+            alert("Your message was sent successfully!");
+
+            messageForm.reset();
+
+            button.disabled = false;
+            button.innerHTML = "Send Message";
+
+
+        } catch (error) {
+
+            console.error("Message submission error:", error);
+
+            alert(
+                "Unable to send your message.\n\n" +
+                error.message
+            );
+
+            button.disabled = false;
+            button.innerHTML = "Send Message";
+
+        }
+
+    });
+
+}
